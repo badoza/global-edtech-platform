@@ -1,5 +1,5 @@
 export const config = {
-  tenantId: 'school_a_001',
+  tenantId: '44d48041-ed3b-4b4f-8315-87c993ecb440',
   brandName: 'Global Excellence Academy',
   colors: {
     primary: '#1A1A40',

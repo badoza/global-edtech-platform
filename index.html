@@ -34,6 +34,10 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        /* Toggle Switch CSS */
+        .toggle-checkbox:checked { right: 0; border-color: #4f46e5; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #4f46e5; }
+        .toggle-checkbox:checked + .toggle-label:before { transform: translateX(100%); }
     </style>
 </head>
 <body>
@@ -50,51 +54,56 @@
             Calendar: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
             Bell: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
             User: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-            Settings: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
             LogOut: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
             Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
             Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
             Users: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>,
-            Edit: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Edit: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>,
+            FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
+            ClipboardCheck: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><polyline points="9 14 11 16 15 11"></polyline></svg>,
+            XCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>,
+            Eye: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         };
 
-        // --- NEW LOCAL DATABASE ARCHITECTURE ---
+        // --- DATABASE v4 (Added Parent Contacts & Leaves) ---
+        const todayStr = new Date().toISOString().split('T')[0];
+
         const DEFAULT_DATA = {
-            name: "Apex Global Academy",
+            name: "LET School & College",
             classes: ["1st Standard", "2nd Standard", "9th Standard", "10th Standard"],
             users: {
                 "teacher10@school.com": { email: "teacher10@school.com", name: "Mrs. Smith", role: "teacher", classAssigned: "10th Standard" },
-                "student10@school.com": { email: "student10@school.com", name: "John Student", role: "student", grade: "10th Standard", attendance: 92, marks: { Math: 85, Science: 90, English: 78 } },
-                "student1@school.com": { email: "student1@school.com", name: "Little Timmy", role: "student", grade: "1st Standard", attendance: 98, marks: { Math: 95, Art: 99, Reading: 92 } }
+                "student10@school.com": { email: "student10@school.com", name: "John Student", role: "student", grade: "10th Standard", attendance: 92, marks: { Math: 85, Science: 90, English: 78 }, parentName: "Robert Student", parentPhone: "+1-555-0102", parentEmail: "robert@family.com" },
+                "student10b@school.com": { email: "student10b@school.com", name: "Alice Wonderland", role: "student", grade: "10th Standard", attendance: 88, marks: { Math: 92, Science: 88, English: 95 }, parentName: "Martha Wonder", parentPhone: "+1-555-0199", parentEmail: "martha@family.com" },
+                "student1@school.com": { email: "student1@school.com", name: "Little Timmy", role: "student", grade: "1st Standard", attendance: 98, marks: { Math: 95, Art: 99, Reading: 92 }, parentName: "Sarah Parent", parentPhone: "+1-555-0100", parentEmail: "sarah@family.com" }
             },
             timetable: [
                 { id: 1, grade: "10th Standard", time: "09:00 AM", subject: "Advanced Math", teacher: "Prof. Jenkins" },
                 { id: 2, grade: "10th Standard", time: "10:30 AM", subject: "Physics", teacher: "Dr. Grant" },
-                { id: 3, grade: "1st Standard", time: "09:00 AM", subject: "Basic Counting", teacher: "Mrs. Davis" },
-                { id: 4, grade: "1st Standard", time: "10:00 AM", subject: "Story Time", teacher: "Mrs. Davis" }
+                { id: 3, grade: "1st Standard", time: "09:00 AM", subject: "Basic Counting", teacher: "Mrs. Davis" }
             ],
             notices: [
-                { id: 1, date: "Today", title: "Welcome to the New Semester", content: "Dear Students and Parents,\n\nWe are thrilled to welcome you back to campus. Please ensure all textbooks are purchased by Friday. \n\nLet's make this a great year!", type: "Info", targetClass: "All" },
-                { id: 2, date: "Yesterday", title: "10th Grade Board Prep", content: "Special evening classes will begin next week for all 10th Standard students.", type: "Urgent", targetClass: "10th Standard" }
+                { id: 1, date: "Today", title: "Welcome to the New Semester", content: "Dear Students and Parents, We are thrilled to welcome you back.", type: "Info", targetClass: "All" }
             ],
             videos: [
-                { id: 1, title: "Calculus Fundamentals", teacher: "Mrs. Smith", subject: "Math", targetClass: "10th Standard", url: "https://www.youtube.com/embed/p_o4aY7vkXg" },
-                { id: 2, title: "Learning the Alphabet", teacher: "Mrs. Davis", subject: "English", targetClass: "1st Standard", url: "https://www.youtube.com/embed/75p-N9YKqNo" }
+                { id: 1, title: "Calculus Fundamentals", teacher: "Mrs. Smith", subject: "Math", targetClass: "10th Standard", url: "https://www.youtube.com/embed/p_o4aY7vkXg" }
+            ],
+            leaves: [
+                { id: 1, studentEmail: "student10b@school.com", studentName: "Alice Wonderland", grade: "10th Standard", date: todayStr, reason: "Attending a family wedding out of state.", status: "Pending", note: "" }
             ]
         };
 
         const loadDB = () => {
-            const saved = localStorage.getItem('EdTechData_v3');
+            const saved = localStorage.getItem('EdTechData_v4');
             if (saved) return JSON.parse(saved);
-            localStorage.setItem('EdTechData_v3', JSON.stringify(DEFAULT_DATA));
+            localStorage.setItem('EdTechData_v4', JSON.stringify(DEFAULT_DATA));
             return DEFAULT_DATA;
         };
 
-        const saveDB = (newData) => localStorage.setItem('EdTechData_v3', JSON.stringify(newData));
+        const saveDB = (newData) => localStorage.setItem('EdTechData_v4', JSON.stringify(newData));
 
         const getYoutubeEmbedUrl = (url) => {
-            if (!url) return '';
-            let videoId = '';
+            if (!url) return ''; let videoId = '';
             try {
                 if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
                 else if (url.includes('watch?v=')) videoId = url.split('watch?v=')[1].split('&')[0];
@@ -104,8 +113,7 @@
         };
 
         const calculatePercentage = (marks) => {
-            if (!marks) return 0;
-            const subjects = Object.values(marks);
+            if (!marks) return 0; const subjects = Object.values(marks);
             if (subjects.length === 0) return 0;
             const total = subjects.reduce((sum, mark) => sum + parseInt(mark || 0), 0);
             return (total / (subjects.length * 100)) * 100;
@@ -116,37 +124,23 @@
         const LandingPage = ({ onNavigate, db }) => (
             <div className="min-h-screen flex flex-col fade-in bg-white">
                 <nav className="bg-white px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
-                    <div className="flex items-center space-x-2 text-primary font-bold text-2xl">
-                        <Icons.GraduationCap /><span>{db.name}</span>
-                    </div>
+                    <div className="flex items-center space-x-2 text-primary font-bold text-2xl"><Icons.GraduationCap /><span>{db.name}</span></div>
                     <button onClick={() => onNavigate('login')} className="bg-primary text-white px-6 py-2.5 rounded-full font-medium hover:bg-indigo-700 shadow transition">Login Portal</button>
                 </nav>
-
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-4 py-16 bg-gradient-to-br from-indigo-50 to-white">
                     <h1 className="text-5xl md:text-7xl font-extrabold text-secondary mb-6 leading-tight max-w-4xl">Smart Campus, <br/><span className="text-primary">Personalized.</span></h1>
-                    <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl">Tailored dashboards for 1st to 10th Standard. See only the timetable, videos, and notices meant for your specific class.</p>
-                    
-                    <button onClick={() => onNavigate('login')} className="bg-secondary text-white px-10 py-4 rounded-full font-bold hover:bg-gray-900 shadow-xl transition transform hover:-translate-y-1 mb-16">
-                        Access Campus
-                    </button>
-
+                    <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl">Advanced student tracking, live attendance SMS, and streamlined leave approvals.</p>
+                    <button onClick={() => onNavigate('login')} className="bg-secondary text-white px-10 py-4 rounded-full font-bold hover:bg-gray-900 shadow-xl transition transform hover:-translate-y-1 mb-16">Access Campus</button>
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-left max-w-3xl w-full">
                         <p className="text-sm text-gray-500 font-bold mb-4 uppercase tracking-wider text-center border-b pb-2">Demo Accounts (Use any password)</p>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                             <div className="bg-blue-50 p-4 rounded-xl">
-                                <p className="font-bold text-blue-800 mb-1">10th Class Teacher</p>
-                                <p className="text-blue-600">teacher10@school.com</p>
-                                <p className="text-xs text-blue-500 mt-2">Update student marks, calculate percentages, and manage timetable.</p>
+                                <p className="font-bold text-blue-800 mb-1">10th Class Teacher</p><p className="text-blue-600">teacher10@school.com</p>
+                                <p className="text-xs text-blue-500 mt-2">Take attendance, approve leaves, trigger SMS to parents.</p>
                             </div>
                             <div className="bg-purple-50 p-4 rounded-xl">
-                                <p className="font-bold text-purple-800 mb-1">10th Grade Student</p>
-                                <p className="text-purple-600">student10@school.com</p>
-                                <p className="text-xs text-purple-500 mt-2">See your attendance, dynamic percentages, and class videos.</p>
-                            </div>
-                            <div className="bg-green-50 p-4 rounded-xl">
-                                <p className="font-bold text-green-800 mb-1">1st Grade Student</p>
-                                <p className="text-green-600">student1@school.com</p>
-                                <p className="text-xs text-green-500 mt-2">See basic counting videos and story time timetable.</p>
+                                <p className="font-bold text-purple-800 mb-1">10th Grade Student</p><p className="text-purple-600">student10@school.com</p>
+                                <p className="text-xs text-purple-500 mt-2">Apply for leave, see approvals, check grades.</p>
                             </div>
                         </div>
                     </div>
@@ -155,22 +149,15 @@
         );
 
         const LoginPage = ({ onLogin, db }) => {
-            const [email, setEmail] = useState('');
-            const [password, setPassword] = useState('');
-            const [error, setError] = useState('');
-            const [loading, setLoading] = useState(false);
-
+            const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [error, setError] = useState(''); const [loading, setLoading] = useState(false);
             const handleLogin = (e) => {
-                e.preventDefault();
-                setLoading(true); setError('');
+                e.preventDefault(); setLoading(true); setError('');
                 setTimeout(() => {
                     const userAccount = db.users[email.toLowerCase()];
-                    if (userAccount) onLogin(userAccount);
-                    else setError(`Account not found. Please use the demo emails.`);
+                    if (userAccount) onLogin(userAccount); else setError(`Account not found. Please use the demo emails.`);
                     setLoading(false);
                 }, 600);
             };
-
             return (
                 <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 fade-in">
                     <div className="glass-card w-full max-w-md p-8 rounded-3xl relative overflow-hidden bg-white shadow-xl">
@@ -178,243 +165,215 @@
                         <div className="flex justify-center mb-6 text-primary cursor-pointer" onClick={() => window.location.reload()}><Icons.GraduationCap /></div>
                         <h2 className="text-2xl font-bold text-center text-secondary mb-2">Secure Login</h2>
                         <p className="text-center text-gray-500 mb-8 text-sm">Sign in to access your dashboard.</p>
-
                         {error && <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 text-center font-medium">{error}</div>}
-
                         <form onSubmit={handleLogin} className="space-y-5">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-sm" placeholder="teacher10@school.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                                <input type="password" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-sm" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                            </div>
-                            <button type="submit" disabled={loading} className={`w-full bg-primary text-white py-3.5 rounded-xl font-bold transition shadow-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'}`}>
-                                {loading ? 'Authenticating...' : 'Sign In'}
-                            </button>
+                            <div><label className="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-sm" placeholder="teacher10@school.com" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
+                            <div><label className="block text-sm font-medium text-gray-700 mb-1">Password</label><input type="password" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-sm" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
+                            <button type="submit" disabled={loading} className={`w-full bg-primary text-white py-3.5 rounded-xl font-bold transition shadow-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'}`}>{loading ? 'Authenticating...' : 'Sign In'}</button>
                         </form>
                     </div>
                 </div>
             );
         };
 
+        // --- Custom Toast for SMS Simulation ---
+        const Toast = ({ message, onClose }) => (
+            <div className="fixed bottom-4 right-4 bg-gray-900 text-white p-4 rounded-xl shadow-2xl z-50 flex items-start space-x-3 fade-in max-w-md border-l-4 border-green-400">
+                <div className="mt-0.5 text-green-400"><Icons.Bell /></div>
+                <div className="flex-1">
+                    <h4 className="font-bold text-sm mb-1">System Action: SMS/Email Dispatched</h4>
+                    <p className="text-xs text-gray-300">{message}</p>
+                </div>
+                <button onClick={onClose} className="text-gray-400 hover:text-white"><Icons.XCircle /></button>
+            </div>
+        );
+
         const App = () => {
             const [view, setView] = useState('landing');
             const [user, setUser] = useState(null);
             const [activeTab, setActiveTab] = useState('home');
             const [db, setDb] = useState(loadDB());
+            const [toastMessage, setToastMessage] = useState(null);
 
-            // Check session and refresh latest user data from DB
             useEffect(() => {
-                const session = localStorage.getItem('activeUser_v3');
-                if (session) { 
-                    const parsedUser = JSON.parse(session);
-                    // Refresh user data from DB in case a teacher updated their marks
-                    setUser(db.users[parsedUser.email]); 
-                    setView('dashboard'); 
-                }
-            }, [db]); // Re-run if DB changes
+                const session = localStorage.getItem('activeUser_v4');
+                if (session) { setUser(db.users[JSON.parse(session).email]); setView('dashboard'); }
+            }, [db]);
 
-            const handleLogin = (userData) => {
-                setUser(userData); localStorage.setItem('activeUser_v3', JSON.stringify(userData));
-                setActiveTab('home'); setView('dashboard'); window.scrollTo(0,0);
-            };
-
-            const handleLogout = () => {
-                setUser(null); localStorage.removeItem('activeUser_v3');
-                setView('landing'); window.scrollTo(0,0);
-            };
-
+            const handleLogin = (userData) => { setUser(userData); localStorage.setItem('activeUser_v4', JSON.stringify(userData)); setActiveTab('home'); setView('dashboard'); window.scrollTo(0,0); };
+            const handleLogout = () => { setUser(null); localStorage.removeItem('activeUser_v4'); setView('landing'); window.scrollTo(0,0); };
             const updateDB = (newDB) => { setDb(newDB); saveDB(newDB); };
+            const triggerSMS = (msg) => { setToastMessage(msg); setTimeout(() => setToastMessage(null), 8000); };
 
             // --- STUDENT VIEWS ---
             const StudentHome = () => {
                 const myTimetable = db.timetable.filter(t => t.grade === user.grade).sort((a,b) => a.time.localeCompare(b.time));
-                const myNotices = db.notices.filter(n => n.targetClass === 'All' || n.targetClass === user.grade);
                 const overallPercentage = calculatePercentage(user.marks).toFixed(1);
-
                 return (
                     <div className="space-y-6 fade-in">
-                        {/* Student Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                                 <div><p className="text-sm text-gray-500 font-medium">My Attendance</p><p className="text-3xl font-extrabold text-green-600">{user.attendance}%</p></div>
                                 <div className="p-4 bg-green-50 text-green-500 rounded-full"><Icons.User /></div>
                             </div>
                             <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                                <div className="flex justify-between items-end mb-2">
-                                    <p className="text-sm text-gray-500 font-medium">Academic Performance</p>
-                                    <span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded">Overall: {overallPercentage}%</span>
-                                </div>
+                                <div className="flex justify-between items-end mb-2"><p className="text-sm text-gray-500 font-medium">Academic Performance</p><span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded">Overall: {overallPercentage}%</span></div>
                                 <div className="flex space-x-4 overflow-x-auto pb-2">
                                     {Object.entries(user.marks || {}).map(([subject, score]) => (
-                                        <div key={subject} className="bg-gray-50 px-4 py-2 rounded-lg text-center flex-shrink-0">
-                                            <p className="text-xs text-gray-400 font-bold uppercase">{subject}</p>
-                                            <p className="text-lg font-bold text-gray-800">{score}/100</p>
-                                        </div>
+                                        <div key={subject} className="bg-gray-50 px-4 py-2 rounded-lg text-center flex-shrink-0"><p className="text-xs text-gray-400 font-bold uppercase">{subject}</p><p className="text-lg font-bold text-gray-800">{score}/100</p></div>
                                     ))}
                                 </div>
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* Class Timetable */}
-                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                                <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Calendar /><span className="ml-2">My Class Schedule ({user.grade})</span></h3>
-                                <div className="space-y-3">
-                                    {myTimetable.length === 0 ? <p className="text-sm text-gray-400">No classes scheduled.</p> : null}
-                                    {myTimetable.map((cls) => (
-                                        <div key={cls.id} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition border border-transparent hover:border-gray-100">
-                                            <div className="w-24 text-sm font-bold text-primary">{cls.time}</div>
-                                            <div className="flex-1">
-                                                <div className="font-bold text-gray-800 text-sm">{cls.subject}</div>
-                                                <div className="text-xs text-gray-500">{cls.teacher}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            {/* Notices */}
-                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-[500px] overflow-y-auto">
-                                <h3 className="text-lg font-bold text-secondary mb-4 flex items-center sticky top-0 bg-white pb-2"><Icons.Bell /><span className="ml-2">Notice Board</span></h3>
-                                <div className="space-y-4">
-                                    {myNotices.length === 0 ? <p className="text-sm text-gray-400">No active notices.</p> : null}
-                                    {myNotices.map(notice => (
-                                        <div key={notice.id} className="p-5 bg-gray-50 rounded-xl border-t-4 border-primary shadow-sm">
-                                            <div className="flex justify-between items-center mb-2">
-                                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${notice.type === 'Urgent' ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'}`}>{notice.type}</span>
-                                                <span className="text-xs font-medium text-gray-400">{notice.date}</span>
-                                            </div>
-                                            <h4 className="text-base font-bold text-gray-800 mb-2">{notice.title}</h4>
-                                            <div className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{notice.content}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-
-            const StudentVideos = () => {
-                const myVideos = db.videos.filter(v => v.targetClass === user.grade);
-                return (
-                    <div className="fade-in space-y-6">
-                        <h3 className="text-xl font-bold text-secondary border-b pb-2">Class Lectures for {user.grade}</h3>
-                        {myVideos.length === 0 ? (
-                            <div className="text-center py-10 text-gray-400 bg-white rounded-xl shadow-sm border border-gray-100">No videos uploaded for your class yet.</div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {myVideos.map(video => (
-                                    <div key={video.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                                        <div className="aspect-video bg-black relative">
-                                            <iframe src={video.url} className="absolute top-0 left-0 w-full h-full" frameBorder="0" allowFullScreen></iframe>
-                                        </div>
-                                        <div className="p-5">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1 block">{video.subject}</span>
-                                            <h4 className="font-bold text-gray-800 mb-1 leading-tight">{video.title}</h4>
-                                            <p className="text-xs text-gray-500">By {video.teacher}</p>
-                                        </div>
+                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                            <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Calendar /><span className="ml-2">My Class Schedule ({user.grade})</span></h3>
+                            <div className="space-y-3">
+                                {myTimetable.length === 0 ? <p className="text-sm text-gray-400">No classes scheduled.</p> : null}
+                                {myTimetable.map((cls) => (
+                                    <div key={cls.id} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition border border-transparent hover:border-gray-100">
+                                        <div className="w-24 text-sm font-bold text-primary">{cls.time}</div>
+                                        <div className="flex-1"><div className="font-bold text-gray-800 text-sm">{cls.subject}</div><div className="text-xs text-gray-500">{cls.teacher}</div></div>
                                     </div>
                                 ))}
                             </div>
-                        )}
+                        </div>
                     </div>
                 );
             };
 
-            // --- TEACHER VIEWS (WITH GRADEBOOK) ---
-            const TeacherHome = () => {
-                const myStudents = Object.values(db.users).filter(u => u.role === 'student' && u.grade === user.classAssigned);
-                
-                const [editingStudent, setEditingStudent] = useState(null);
-                const [editForm, setEditForm] = useState({});
+            const StudentLeaveManagement = () => {
+                const [date, setDate] = useState('');
+                const [reason, setReason] = useState('');
+                const myLeaves = db.leaves.filter(l => l.studentEmail === user.email).sort((a,b) => new Date(b.date) - new Date(a.date));
 
-                const startEdit = (student) => {
-                    setEditingStudent(student.email);
-                    setEditForm({ attendance: student.attendance, marks: { ...student.marks } });
-                };
-
-                const saveEdit = (email) => {
-                    const newDB = { ...db };
-                    newDB.users[email] = { ...newDB.users[email], attendance: parseInt(editForm.attendance) || 0, marks: editForm.marks };
-                    updateDB(newDB);
-                    setEditingStudent(null);
-                };
-
-                const handleMarkChange = (subject, val) => {
-                    setEditForm({ ...editForm, marks: { ...editForm.marks, [subject]: parseInt(val) || 0 } });
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    const newLeave = { id: Date.now(), studentEmail: user.email, studentName: user.name, grade: user.grade, date, reason, status: 'Pending', note: '' };
+                    updateDB({...db, leaves: [newLeave, ...db.leaves]});
+                    setDate(''); setReason('');
                 };
 
                 return (
-                    <div className="fade-in space-y-6">
-                        <div className="bg-primary rounded-2xl p-6 text-white shadow-md flex justify-between items-center">
-                            <div>
-                                <h2 className="text-2xl font-bold">Gradebook & Roster</h2>
-                                <p className="text-indigo-200">You are managing records for <strong>{user.classAssigned}</strong>.</p>
+                    <div className="fade-in grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit">
+                            <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.FileText /><span className="ml-2">Apply for Leave</span></h3>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div><label className="block text-sm font-medium text-gray-700 mb-1">Date of Leave</label><input type="date" value={date} onChange={e=>setDate(e.target.value)} required min={todayStr} className="w-full text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" /></div>
+                                <div><label className="block text-sm font-medium text-gray-700 mb-1">Reason</label><textarea value={reason} onChange={e=>setReason(e.target.value)} required rows="4" className="w-full text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary resize-none" placeholder="Explain your reason..."></textarea></div>
+                                <button type="submit" className="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">Submit Request</button>
+                            </form>
+                        </div>
+                        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 className="text-lg font-bold text-secondary mb-4">My Leave History</h3>
+                            <div className="space-y-4">
+                                {myLeaves.length === 0 ? <p className="text-sm text-gray-400">No leave requests found.</p> : null}
+                                {myLeaves.map(l => (
+                                    <div key={l.id} className="p-4 border border-gray-100 rounded-xl bg-gray-50 flex flex-col md:flex-row justify-between md:items-start gap-4">
+                                        <div>
+                                            <div className="flex items-center space-x-2 mb-1">
+                                                <span className="font-bold text-gray-800">{new Date(l.date).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
+                                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${l.status==='Approved'?'bg-green-100 text-green-700':l.status==='Denied'?'bg-red-100 text-red-700':'bg-yellow-100 text-yellow-700'}`}>{l.status}</span>
+                                            </div>
+                                            <p className="text-sm text-gray-600">{l.reason}</p>
+                                        </div>
+                                        {l.note && (
+                                            <div className="bg-white p-3 rounded-lg border border-indigo-100 max-w-xs w-full">
+                                                <p className="text-[10px] uppercase font-bold text-indigo-400 mb-1">Note from Teacher:</p>
+                                                <p className="text-xs text-gray-700">{l.note}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            // --- TEACHER VIEWS ---
+
+            // Sub-component: Student Profile Modal
+            const StudentModal = ({ student, onClose }) => {
+                if(!student) return null;
+                const overall = calculatePercentage(student.marks).toFixed(1);
+                return (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in">
+                        <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+                            <div className="bg-gradient-to-r from-primary to-indigo-600 p-6 text-white flex justify-between items-start">
+                                <div><h2 className="text-2xl font-bold">{student.name}</h2><p className="text-indigo-200 text-sm">{student.grade} • {student.email}</p></div>
+                                <button onClick={onClose} className="text-white hover:text-gray-200"><Icons.XCircle /></button>
+                            </div>
+                            <div className="p-6 space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100"><p className="text-xs text-gray-500 font-bold uppercase mb-1">Attendance</p><p className="text-2xl font-extrabold text-gray-800">{student.attendance}%</p></div>
+                                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100"><p className="text-xs text-gray-500 font-bold uppercase mb-1">Overall Grade</p><p className="text-2xl font-extrabold text-primary">{overall}%</p></div>
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-gray-800 border-b pb-2 mb-3">Parent/Guardian Contact</h4>
+                                    <div className="space-y-2 text-sm text-gray-600">
+                                        <p><strong className="text-gray-800">Name:</strong> {student.parentName || 'N/A'}</p>
+                                        <p><strong className="text-gray-800">Phone:</strong> {student.parentPhone || 'N/A'}</p>
+                                        <p><strong className="text-gray-800">Email:</strong> {student.parentEmail || 'N/A'}</p>
+                                    </div>
+                                </div>
+                                <div className="pt-4 border-t flex justify-end"><button onClick={onClose} className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition">Close Profile</button></div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const TeacherHome = () => {
+                const myStudents = Object.values(db.users).filter(u => u.role === 'student' && u.grade === user.classAssigned);
+                const [editingStudent, setEditingStudent] = useState(null);
+                const [editForm, setEditForm] = useState({});
+                const [profileStudent, setProfileStudent] = useState(null);
+
+                const startEdit = (student) => { setEditingStudent(student.email); setEditForm({ attendance: student.attendance, marks: { ...student.marks } }); };
+                const saveEdit = (email) => { const newDB = { ...db }; newDB.users[email] = { ...newDB.users[email], attendance: parseInt(editForm.attendance) || 0, marks: editForm.marks }; updateDB(newDB); setEditingStudent(null); };
+                const handleMarkChange = (subject, val) => { setEditForm({ ...editForm, marks: { ...editForm.marks, [subject]: parseInt(val) || 0 } }); };
+
+                return (
+                    <div className="fade-in space-y-6">
+                        <StudentModal student={profileStudent} onClose={() => setProfileStudent(null)} />
+                        
+                        <div className="bg-primary rounded-2xl p-6 text-white shadow-md flex justify-between items-center">
+                            <div><h2 className="text-2xl font-bold">Gradebook & Roster</h2><p className="text-indigo-200">Managing records for <strong>{user.classAssigned}</strong>.</p></div>
                             <div className="hidden md:flex p-4 bg-white/20 rounded-full"><Icons.Users /></div>
                         </div>
 
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                                <h3 className="text-lg font-bold text-secondary">Student Performance Editor</h3>
-                                <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Auto-syncs percentage</span>
-                            </div>
+                            <div className="p-6 border-b border-gray-100 flex justify-between items-center"><h3 className="text-lg font-bold text-secondary">Student Directory</h3></div>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse min-w-[800px]">
                                     <thead>
                                         <tr className="bg-gray-50 text-gray-500 text-sm border-b">
-                                            <th className="p-4 font-medium">Student Info</th>
-                                            <th className="p-4 font-medium">Attendance %</th>
-                                            <th className="p-4 font-medium">Subject Marks (out of 100)</th>
-                                            <th className="p-4 font-medium">Overall %</th>
-                                            <th className="p-4 font-medium text-right">Actions</th>
+                                            <th className="p-4 font-medium">Student Info</th><th className="p-4 font-medium">Attendance</th><th className="p-4 font-medium">Subject Marks</th><th className="p-4 font-medium">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="text-sm text-gray-700">
-                                        {myStudents.length === 0 ? <tr><td colSpan="5" className="p-6 text-center text-gray-400">No students enrolled yet.</td></tr> : null}
                                         {myStudents.map((s, i) => {
                                             const isEditing = editingStudent === s.email;
-                                            const totalPercentage = calculatePercentage(isEditing ? editForm.marks : s.marks).toFixed(1);
-                                            
                                             return (
                                             <tr key={i} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
                                                 <td className="p-4">
-                                                    <p className="font-bold text-gray-900">{s.name}</p>
+                                                    <p className="font-bold text-gray-900 flex items-center">{s.name} 
+                                                        <button onClick={()=>setProfileStudent(s)} className="ml-2 text-indigo-400 hover:text-indigo-600" title="View Full Profile"><Icons.Eye /></button>
+                                                    </p>
                                                     <p className="text-xs text-gray-400">{s.email}</p>
                                                 </td>
                                                 <td className="p-4">
-                                                    {isEditing ? (
-                                                        <input type="number" max="100" min="0" value={editForm.attendance} onChange={e => setEditForm({...editForm, attendance: e.target.value})} className="w-16 p-1 border rounded focus:border-primary outline-none" />
-                                                    ) : (
-                                                        <span className={`px-2 py-1 rounded text-xs font-bold ${s.attendance > 85 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{s.attendance}%</span>
-                                                    )}
+                                                    {isEditing ? <input type="number" max="100" min="0" value={editForm.attendance} onChange={e => setEditForm({...editForm, attendance: e.target.value})} className="w-16 p-1 border rounded focus:border-primary outline-none" /> : <span className={`px-2 py-1 rounded text-xs font-bold ${s.attendance > 85 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{s.attendance}%</span>}
                                                 </td>
                                                 <td className="p-4">
                                                     <div className="flex gap-2 flex-wrap">
                                                         {Object.entries(isEditing ? editForm.marks : s.marks).map(([sub, mark]) => (
-                                                            <div key={sub} className="flex flex-col border border-gray-200 rounded p-1 text-xs bg-gray-50">
-                                                                <span className="text-gray-400 mb-1">{sub}</span>
-                                                                {isEditing ? (
-                                                                    <input type="number" max="100" min="0" value={mark} onChange={e => handleMarkChange(sub, e.target.value)} className="w-12 p-0.5 text-center border border-gray-300 rounded" />
-                                                                ) : (
-                                                                    <span className="font-bold text-center text-gray-800">{mark}</span>
-                                                                )}
-                                                            </div>
+                                                            <div key={sub} className="flex flex-col border border-gray-200 rounded p-1 text-xs bg-gray-50"><span className="text-gray-400 mb-1">{sub}</span>{isEditing ? <input type="number" max="100" min="0" value={mark} onChange={e => handleMarkChange(sub, e.target.value)} className="w-12 p-0.5 text-center border border-gray-300 rounded" /> : <span className="font-bold text-center text-gray-800">{mark}</span>}</div>
                                                         ))}
                                                     </div>
                                                 </td>
                                                 <td className="p-4">
-                                                    <span className="font-extrabold text-primary">{totalPercentage}%</span>
-                                                </td>
-                                                <td className="p-4 text-right">
-                                                    {isEditing ? (
-                                                        <button onClick={() => saveEdit(s.email)} className="bg-green-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow hover:bg-green-600 transition">Save</button>
-                                                    ) : (
-                                                        <button onClick={() => startEdit(s)} className="text-gray-400 hover:text-primary transition flex items-center justify-end w-full"><Icons.Edit /><span className="ml-1 text-xs">Edit</span></button>
-                                                    )}
+                                                    {isEditing ? <button onClick={() => saveEdit(s.email)} className="bg-green-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow hover:bg-green-600 transition">Save</button> : <button onClick={() => startEdit(s)} className="text-gray-400 hover:text-primary transition flex items-center"><Icons.Edit /><span className="ml-1 text-xs">Edit Marks</span></button>}
                                                 </td>
                                             </tr>
                                         )})}
@@ -426,155 +385,169 @@
                 );
             };
 
-            const TeacherTimetable = () => {
-                const [targetClass, setTargetClass] = useState(user.classAssigned);
-                const [time, setTime] = useState('');
-                const [subject, setSubject] = useState('');
-                const [teacherName, setTeacherName] = useState(user.name);
+            const TeacherAttendance = () => {
+                const myStudents = Object.values(db.users).filter(u => u.role === 'student' && u.grade === user.classAssigned);
+                const classTimetable = db.timetable.filter(t => t.grade === user.classAssigned);
+                
+                const [selectedPeriod, setSelectedPeriod] = useState(classTimetable.length > 0 ? classTimetable[0].id : '');
+                const [attendanceMap, setAttendanceMap] = useState({}); // email -> boolean (true=present)
 
-                const handleAdd = (e) => {
-                    e.preventDefault();
-                    const newDB = { ...db, timetable: [...db.timetable, { id: Date.now(), grade: targetClass, time, subject, teacher: teacherName }] };
-                    updateDB(newDB); setTime(''); setSubject('');
+                // Initialize all as Present when component loads or period changes
+                useEffect(() => {
+                    const initMap = {};
+                    myStudents.forEach(s => initMap[s.email] = true);
+                    setAttendanceMap(initMap);
+                }, [selectedPeriod]);
+
+                const handleToggle = (email) => setAttendanceMap({...attendanceMap, [email]: !attendanceMap[email]});
+
+                const handleSubmitAttendance = () => {
+                    if(!selectedPeriod) return alert("Select a period first.");
+                    const periodDetails = classTimetable.find(t => t.id.toString() === selectedPeriod.toString());
+                    
+                    let notificationLogs = [];
+
+                    myStudents.forEach(student => {
+                        const isPresent = attendanceMap[student.email];
+                        if (!isPresent) {
+                            // Check if student has an APPROVED leave for TODAY
+                            const activeLeave = db.leaves.find(l => l.studentEmail === student.email && l.date === todayStr && l.status === 'Approved');
+                            
+                            if (activeLeave) {
+                                console.log(`${student.name} is absent but has approved leave.`);
+                            } else {
+                                // NO LEAVE = Send SMS/Email Alert!
+                                notificationLogs.push(`📱 SMS to ${student.parentName} (${student.parentPhone}): ${student.name} was marked absent for ${periodDetails.subject} at ${periodDetails.time}.`);
+                            }
+                        }
+                    });
+
+                    if (notificationLogs.length > 0) {
+                        triggerSMS(notificationLogs.join(" \n\n"));
+                    } else {
+                        triggerSMS("Attendance recorded successfully. No unauthorized absences detected.");
+                    }
                 };
-                const handleDelete = (id) => updateDB({ ...db, timetable: db.timetable.filter(t => t.id !== id) });
 
-                const viewingTimetable = db.timetable.filter(t => t.grade === targetClass).sort((a,b) => a.time.localeCompare(b.time));
+                return (
+                    <div className="fade-in space-y-6 max-w-4xl mx-auto">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b pb-4">
+                                <h3 className="text-lg font-bold text-secondary flex items-center"><Icons.ClipboardCheck /><span className="ml-2">Live Class Attendance</span></h3>
+                                <div className="mt-4 md:mt-0 flex items-center space-x-3">
+                                    <span className="text-sm text-gray-500 font-medium">Select Period:</span>
+                                    <select value={selectedPeriod} onChange={e=>setSelectedPeriod(e.target.value)} className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold text-primary outline-none">
+                                        {classTimetable.length === 0 ? <option value="">No periods scheduled</option> : null}
+                                        {classTimetable.map(c => <option key={c.id} value={c.id}>{c.time} - {c.subject}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-6 flex justify-between items-center text-sm">
+                                <p className="text-blue-800">Date: <strong>{new Date().toLocaleDateString('en-US', {weekday:'long', month:'short', day:'numeric'})}</strong></p>
+                                <p className="text-blue-600">Total Students: {myStudents.length}</p>
+                            </div>
+
+                            <div className="space-y-3 mb-8">
+                                {myStudents.map(s => {
+                                    const isPresent = attendanceMap[s.email];
+                                    const activeLeave = db.leaves.find(l => l.studentEmail === s.email && l.date === todayStr && l.status === 'Approved');
+                                    return (
+                                    <div key={s.email} className={`flex items-center justify-between p-4 border rounded-xl transition ${activeLeave ? 'bg-orange-50/50 border-orange-200' : isPresent ? 'bg-white border-gray-200' : 'bg-red-50/30 border-red-200'}`}>
+                                        <div className="flex items-center space-x-4">
+                                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold">{s.name.charAt(0)}</div>
+                                            <div>
+                                                <p className="font-bold text-gray-800">{s.name}</p>
+                                                {activeLeave && <span className="text-[10px] uppercase font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded">On Approved Leave Today</span>}
+                                            </div>
+                                        </div>
+                                        {activeLeave ? (
+                                            <span className="text-sm font-bold text-orange-500">Excused</span>
+                                        ) : (
+                                            <div className="flex items-center space-x-3">
+                                                <span className={`text-sm font-bold ${isPresent ? 'text-green-600' : 'text-red-500'}`}>{isPresent ? 'Present' : 'Absent'}</span>
+                                                <div className="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                                    <input type="checkbox" name="toggle" id={`toggle-${s.email}`} checked={isPresent} onChange={()=>handleToggle(s.email)} className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer transition-transform duration-200 ease-in-out"/>
+                                                    <label htmlFor={`toggle-${s.email}`} className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-200 ease-in-out ${isPresent ? 'bg-green-500' : 'bg-red-400'}`}></label>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )})}
+                            </div>
+
+                            <button onClick={handleSubmitAttendance} className="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition transform hover:-translate-y-0.5 text-lg">
+                                Submit Attendance & Notify Parents
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            const TeacherLeaveApproval = () => {
+                const classLeaves = db.leaves.filter(l => l.grade === user.classAssigned).sort((a,b) => new Date(b.date) - new Date(a.date));
+                const [noteInput, setNoteInput] = useState({}); // id -> string
+
+                const updateLeaveStatus = (id, newStatus) => {
+                    const newDB = { ...db, leaves: db.leaves.map(l => l.id === id ? { ...l, status: newStatus, note: noteInput[id] || l.note } : l) };
+                    updateDB(newDB);
+                    setNoteInput({...noteInput, [id]: ''}); // clear input after action
+                };
 
                 return (
                     <div className="fade-in space-y-6">
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b pb-4">
-                                <h3 className="text-lg font-bold text-secondary flex items-center"><Icons.Calendar /><span className="ml-2">Manage Timetable</span></h3>
-                                <select value={targetClass} onChange={e=>setTargetClass(e.target.value)} className="mt-4 md:mt-0 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold text-primary outline-none">
-                                    {db.classes.map(c => <option key={c} value={c}>View: {c}</option>)}
-                                </select>
-                            </div>
-
-                            <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-4 gap-3 bg-indigo-50/50 p-4 rounded-xl mb-6 border border-indigo-100">
-                                <input type="text" placeholder="Time (e.g. 09:00 AM)" value={time} onChange={e=>setTime(e.target.value)} required className="px-3 py-2 text-sm rounded-lg border outline-none focus:border-primary" />
-                                <input type="text" placeholder="Subject" value={subject} onChange={e=>setSubject(e.target.value)} required className="px-3 py-2 text-sm rounded-lg border outline-none focus:border-primary" />
-                                <input type="text" placeholder="Professor Name" value={teacherName} onChange={e=>setTeacherName(e.target.value)} required className="px-3 py-2 text-sm rounded-lg border outline-none focus:border-primary" />
-                                <button type="submit" className="bg-primary text-white py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Add Slot</span></button>
-                            </form>
-
-                            <div className="space-y-2">
-                                {viewingTimetable.length === 0 ? <p className="text-center text-gray-400 py-4 text-sm">No timetable created for {targetClass} yet.</p> : null}
-                                {viewingTimetable.map(t => (
-                                    <div key={t.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl bg-white hover:shadow-sm transition">
-                                        <div className="flex items-center space-x-6">
-                                            <div className="w-24 text-sm font-bold text-primary bg-indigo-50 py-1 px-2 rounded text-center">{t.time}</div>
-                                            <div><p className="font-bold text-gray-800 text-sm">{t.subject}</p><p className="text-xs text-gray-500">Prof: {t.teacher}</p></div>
-                                        </div>
-                                        <button onClick={()=>handleDelete(t.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Remove Slot"><Icons.Trash /></button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-
-            const TeacherNoticesAndVideos = () => {
-                const [targetClass, setTargetClass] = useState('All');
-                const [title, setTitle] = useState('');
-                const [content, setContent] = useState('');
-                const [type, setType] = useState('Info');
-
-                const [vidTitle, setVidTitle] = useState('');
-                const [vidSubject, setVidSubject] = useState('');
-                const [vidUrl, setVidUrl] = useState('');
-                const [vidTargetClass, setVidTargetClass] = useState(user.classAssigned);
-
-                const handleAddNotice = (e) => { e.preventDefault(); addNotice(title, type); setTitle(''); setContent(''); };
-                const handleAddVideo = (e) => { e.preventDefault(); addVideo(vidTitle, user.name, vidSubject, vidUrl); setVidTitle(''); setVidSubject(''); setVidUrl(''); };
-
-                const addNotice = (title, type) => { updateDB({ ...db, notices: [{ id: Date.now(), date: "Just now", title, content, type, targetClass }, ...db.notices] }); }
-                const deleteNotice = (id) => updateDB({ ...db, notices: db.notices.filter(n => n.id !== id) });
-                const addVideo = (title, teacher, subject, rawUrl) => {
-                    const embedUrl = getYoutubeEmbedUrl(rawUrl);
-                    if (!embedUrl) return alert("Invalid YouTube URL.");
-                    updateDB({ ...db, videos: [{ id: Date.now(), title, teacher, subject, targetClass: vidTargetClass, url: embedUrl }, ...db.videos] });
-                };
-                const deleteVideo = (id) => updateDB({ ...db, videos: db.videos.filter(v => v.id !== id) });
-
-
-                return (
-                    <div className="fade-in grid grid-cols-1 xl:grid-cols-2 gap-8 pb-10">
-                        {/* Notice Manager */}
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-[700px]">
-                            <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Bell /><span className="ml-2">Notice Board Publisher</span></h3>
-                            <form onSubmit={handleAddNotice} className="bg-gray-50 p-4 rounded-xl mb-6 space-y-3 flex-shrink-0 border border-gray-200">
-                                <div className="flex space-x-2">
-                                    <select value={targetClass} onChange={e=>setTargetClass(e.target.value)} className="w-1/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary bg-white">
-                                        <option value="All">All Classes</option>
-                                        {db.classes.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                    <select value={type} onChange={e=>setType(e.target.value)} className="w-1/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary bg-white">
-                                        <option>Info</option><option>Urgent</option>
-                                    </select>
-                                    <input type="text" placeholder="Title" value={title} onChange={e=>setTitle(e.target.value)} required className="w-1/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
-                                </div>
-                                <textarea placeholder="Write your detailed notice here... (Paragraphs are supported)" value={content} onChange={e=>setContent(e.target.value)} required rows="4" className="w-full text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary resize-none"></textarea>
-                                <button type="submit" className="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Publish Notice</span></button>
-                            </form>
-                            <div className="overflow-y-auto flex-1 pr-2 space-y-4">
-                                {db.notices.map(n => (
-                                    <div key={n.id} className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm relative">
-                                        <div className="absolute top-4 right-4 flex items-center space-x-2">
-                                            <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold border">Target: {n.targetClass}</span>
-                                            <button onClick={()=>deleteNotice(n.id)} className="text-red-400 hover:text-red-600 transition"><Icons.Trash /></button>
-                                        </div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${n.type === 'Urgent' ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'}`}>{n.type}</span>
-                                        <h4 className="text-sm font-bold text-gray-800 mt-2 mb-1 pr-20">{n.title}</h4>
-                                        <div className="text-xs text-gray-600 whitespace-pre-wrap line-clamp-3">{n.content}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Video Manager */}
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-[700px]">
-                            <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Video /><span className="ml-2">Video Library Manager</span></h3>
-                            <form onSubmit={handleAddVideo} className="bg-gray-50 p-4 rounded-xl mb-6 space-y-3 flex-shrink-0 border border-gray-200">
-                                <div className="flex space-x-2">
-                                    <select value={vidTargetClass} onChange={e=>setVidTargetClass(e.target.value)} className="w-1/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary bg-white">
-                                        {db.classes.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                    <input type="text" placeholder="Subject" value={vidSubject} onChange={e=>setVidSubject(e.target.value)} required className="w-2/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
-                                </div>
-                                <input type="text" placeholder="Video Title" value={vidTitle} onChange={e=>setVidTitle(e.target.value)} required className="w-full text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
-                                <input type="url" placeholder="YouTube URL Link" value={vidUrl} onChange={e=>setVidUrl(e.target.value)} required className="w-full text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
-                                <button type="submit" className="w-full bg-secondary text-white py-2.5 rounded-lg text-sm font-bold hover:bg-gray-900 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Upload Video to Class</span></button>
-                            </form>
-                            <div className="overflow-y-auto flex-1 pr-2 space-y-3">
-                                {db.videos.map(v => (
-                                    <div key={v.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
-                                        <div className="truncate pr-4">
-                                            <div className="flex items-center space-x-2 mb-1">
-                                                <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded font-bold">{v.targetClass}</span>
-                                                <p className="text-sm font-bold text-gray-800 truncate">{v.title}</p>
+                            <h3 className="text-lg font-bold text-secondary mb-6 flex items-center"><Icons.FileText /><span className="ml-2">Leave Requests ({user.classAssigned})</span></h3>
+                            
+                            <div className="space-y-6">
+                                {classLeaves.length === 0 ? <p className="text-gray-400 text-center py-6">No leave requests pending.</p> : null}
+                                {classLeaves.map(leave => (
+                                    <div key={leave.id} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                        <div className={`p-4 flex justify-between items-center border-b ${leave.status === 'Pending' ? 'bg-yellow-50' : 'bg-gray-50'}`}>
+                                            <div>
+                                                <h4 className="font-bold text-gray-900">{leave.studentName}</h4>
+                                                <p className="text-xs text-gray-500">Requested for: <span className="font-bold">{new Date(leave.date).toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'})}</span></p>
                                             </div>
-                                            <p className="text-xs text-gray-500">{v.subject} • By {v.teacher}</p>
+                                            <span className={`text-xs uppercase font-bold px-3 py-1 rounded-full ${leave.status==='Approved'?'bg-green-100 text-green-700':leave.status==='Denied'?'bg-red-100 text-red-700':'bg-yellow-200 text-yellow-800'}`}>{leave.status}</span>
                                         </div>
-                                        <button onClick={()=>deleteVideo(v.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"><Icons.Trash /></button>
+                                        <div className="p-4">
+                                            <p className="text-sm text-gray-700 mb-4"><strong>Reason:</strong> {leave.reason}</p>
+                                            
+                                            {leave.status === 'Pending' ? (
+                                                <div className="space-y-3">
+                                                    <input type="text" placeholder="Add a note to student (e.g. Bring doctor certificate)" value={noteInput[leave.id] || ''} onChange={e=>setNoteInput({...noteInput, [leave.id]: e.target.value})} className="w-full text-sm px-3 py-2 border border-gray-200 rounded outline-none focus:border-primary bg-gray-50" />
+                                                    <div className="flex space-x-3">
+                                                        <button onClick={()=>updateLeaveStatus(leave.id, 'Approved')} className="flex-1 bg-green-500 text-white py-2 rounded font-bold hover:bg-green-600 transition">Approve</button>
+                                                        <button onClick={()=>updateLeaveStatus(leave.id, 'Denied')} className="flex-1 bg-red-500 text-white py-2 rounded font-bold hover:bg-red-600 transition">Deny</button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    {leave.note && <p className="text-sm text-gray-500 italic bg-gray-50 p-2 rounded"><strong>Your Note:</strong> {leave.note}</p>}
+                                                    <button onClick={()=>updateLeaveStatus(leave.id, 'Pending')} className="mt-3 text-xs text-indigo-500 font-bold hover:underline">Re-evaluate Request</button>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
                 );
-            };
+            }
 
+            // --- Layout Rendering ---
             if (view === 'landing') return <LandingPage onNavigate={setView} db={db} />;
             if (view === 'login') return <LoginPage onLogin={handleLogin} db={db} />;
             
             const navItems = user?.role === 'student' 
-                ? [ { id: 'home', label: 'My Dashboard', icon: <Icons.Calendar /> }, { id: 'videos', label: 'My Class Videos', icon: <Icons.Video /> } ]
-                : [ { id: 'home', label: 'Gradebook Editor', icon: <Icons.Users /> }, { id: 'timetable', label: 'Timetable Editor', icon: <Icons.Calendar /> }, { id: 'content', label: 'Notices & Videos', icon: <Icons.BookOpen /> } ];
+                ? [ { id: 'home', label: 'My Dashboard', icon: <Icons.Calendar /> }, { id: 'leave', label: 'Leave Requests', icon: <Icons.FileText /> } ]
+                : [ { id: 'home', label: 'Roster & Grades', icon: <Icons.Users /> }, { id: 'attendance', label: 'Take Attendance', icon: <Icons.ClipboardCheck /> }, { id: 'leaves', label: 'Leave Approvals', icon: <Icons.FileText /> } ];
 
             return (
-                <div className="min-h-screen bg-background flex flex-col md:flex-row">
+                <div className="min-h-screen bg-background flex flex-col md:flex-row relative">
+                    {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
+                    
                     <aside className="w-full md:w-64 bg-white border-r border-gray-200 flex flex-col md:fixed md:h-full z-10 shadow-sm">
                         <div className="p-6 flex items-center space-x-2 text-primary font-bold text-xl border-b border-gray-50">
                             <Icons.GraduationCap /> <span className="truncate">{db.name}</span>
@@ -594,9 +567,7 @@
                             ))}
                         </nav>
                         <div className="p-4 md:mt-auto hidden md:block">
-                            <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl text-sm font-bold text-red-500 bg-red-50 hover:bg-red-100 transition">
-                                <Icons.LogOut /> <span>Secure Logout</span>
-                            </button>
+                            <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl text-sm font-bold text-red-500 bg-red-50 hover:bg-red-100 transition"><Icons.LogOut /> <span>Secure Logout</span></button>
                         </div>
                     </aside>
                     <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-y-auto">
@@ -609,11 +580,11 @@
                         </div>
                         
                         {user?.role === 'student' && activeTab === 'home' && <StudentHome />}
-                        {user?.role === 'student' && activeTab === 'videos' && <StudentVideos />}
+                        {user?.role === 'student' && activeTab === 'leave' && <StudentLeaveManagement />}
                         
                         {user?.role === 'teacher' && activeTab === 'home' && <TeacherHome />}
-                        {user?.role === 'teacher' && activeTab === 'timetable' && <TeacherTimetable />}
-                        {user?.role === 'teacher' && activeTab === 'content' && <TeacherNoticesAndVideos />}
+                        {user?.role === 'teacher' && activeTab === 'attendance' && <TeacherAttendance />}
+                        {user?.role === 'teacher' && activeTab === 'leaves' && <TeacherLeaveApproval />}
                     </main>
                 </div>
             );

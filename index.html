@@ -5,29 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global EdTech | Premium Campus Platform</title>
     
-    <!-- Tailwind CSS for Premium Styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React & ReactDOM (Loaded directly in browser) -->
+    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     
-    <!-- Babel to compile JSX in the browser -->
+    <!-- Babel to compile JSX -->
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- FIREBASE LIBRARIES -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        primary: '#4f46e5', // Indigo 600
-                        secondary: '#1e293b', // Slate 800
-                        accent: '#ec4899', // Pink 500
-                        background: '#f8fafc', // Slate 50
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    }
+                    colors: { primary: '#4f46e5', secondary: '#1e293b', accent: '#ec4899', background: '#f8fafc' },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
                 }
             }
         }
@@ -35,56 +32,37 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        }
-        .fade-in { animation: fadeIn 0.4s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
+        // ==========================================
+        // 🛑 1. REPLACE THIS WITH YOUR FIREBASE CONFIG
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
         const { useState, useEffect } = React;
 
-        // --- MOCK DATA ---
-        const schoolDetails = {
-            name: "Apex Global Academy",
-            tagline: "Empowering the Leaders of Tomorrow",
-            about: "A premier institution dedicated to academic excellence, holistic development, and modern learning methodologies. We integrate technology with traditional values to provide a world-class education.",
-            stats: { students: "2,500+", teachers: "150+", courses: "40+" }
-        };
-
-        const mockNotices = [
-            { id: 1, date: "Oct 24", title: "Mid-Term Exam Schedule Released", type: "Urgent" },
-            { id: 2, date: "Oct 20", title: "Annual Science Fair Registration", type: "Info" },
-            { id: 3, date: "Oct 15", title: "Campus Maintenance Tomorrow", type: "Alert" }
-        ];
-
-        const mockTimetable = [
-            { time: "09:00 AM", subject: "Advanced Mathematics", teacher: "Prof. Sarah Jenkins" },
-            { time: "10:30 AM", subject: "Physics (Theory)", teacher: "Dr. Alan Grant" },
-            { time: "12:00 PM", subject: "Lunch Break", teacher: "-" },
-            { time: "01:00 PM", subject: "Computer Science", teacher: "Mr. David Chen" }
-        ];
-
-        const mockMaterials = [
-            { id: 1, title: "Chapter 4: Calculus PDF", subject: "Math", size: "2.4 MB" },
-            { id: 2, title: "Thermodynamics Notes", subject: "Physics", size: "1.8 MB" },
-            { id: 3, title: "Python Basics Syllabus", subject: "CS", size: "0.5 MB" }
-        ];
-
-        const mockVideos = [
-            { id: 1, title: "Understanding React Hooks", teacher: "David Chen", duration: "14:20", thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=500&q=80" },
-            { id: 2, title: "Newton's Laws Explained", teacher: "Alan Grant", duration: "22:15", thumbnail: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=500&q=80" },
-            { id: 3, title: "Integration Tricks", teacher: "Sarah Jenkins", duration: "18:45", thumbnail: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=500&q=80" }
-        ];
-
-        // --- ICONS (SVG) ---
+        // --- ICONS ---
         const Icons = {
             GraduationCap: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
             BookOpen: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
@@ -94,407 +72,410 @@
             User: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
             Settings: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
             LogOut: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
-            Download: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
+            Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
+            Activity: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>,
+            Google: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         };
 
-        // --- COMPONENTS ---
+        // ==========================================
+        // 🛑 2. ADD YOUR ALLOWED EMAILS HERE
+        // ==========================================
+        const SCHOOL_DB = {
+            name: "Apex Global Academy",
+            users: {
+                // Change these to real Gmail addresses to test!
+                "admin@gmail.com": { name: "Admin Principal", role: "admin" },
+                "student@gmail.com": { name: "John Student", role: "student", grade: "10th" },
+                "parent@gmail.com": { name: "Sarah Parent", role: "student", grade: "12th" }
+            },
+            timetable: [
+                { time: "09:00 AM", subject: "Advanced Mathematics", teacher: "Prof. Jenkins" },
+                { time: "10:30 AM", subject: "Physics (Theory)", teacher: "Dr. Grant" },
+                { time: "12:00 PM", subject: "Lunch Break", teacher: "-" },
+                { time: "01:00 PM", subject: "Computer Science", teacher: "Mr. Chen" }
+            ]
+        };
 
-        // 1. Landing Page (Public)
+        const getYoutubeEmbedUrl = (url) => {
+            if (!url) return '';
+            let videoId = '';
+            try {
+                if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+                else if (url.includes('watch?v=')) videoId = url.split('watch?v=')[1].split('&')[0];
+                else if (url.includes('embed/')) return url;
+            } catch (e) { return null; }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+        };
+
+
         const LandingPage = ({ onNavigate }) => (
-            <div className="min-h-screen flex flex-col fade-in">
-                {/* Navbar */}
+            <div className="min-h-screen flex flex-col fade-in bg-white">
                 <nav className="bg-white px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
-                    <div className="flex items-center space-x-2 text-primary font-bold text-2xl tracking-tight">
+                    <div className="flex items-center space-x-2 text-primary font-bold text-2xl">
                         <Icons.GraduationCap />
-                        <span>{schoolDetails.name}</span>
+                        <span>{SCHOOL_DB.name}</span>
                     </div>
-                    <div className="space-x-4">
-                        <button onClick={() => onNavigate('login')} className="text-secondary font-medium hover:text-primary transition">Login</button>
-                        <button onClick={() => onNavigate('login')} className="bg-primary text-white px-5 py-2 rounded-full font-medium hover:bg-indigo-700 shadow-md transition">Portal Access</button>
-                    </div>
+                    <button onClick={() => onNavigate('login')} className="bg-primary text-white px-6 py-2.5 rounded-full font-medium hover:bg-indigo-700 shadow transition">Login Portal</button>
                 </nav>
 
-                {/* Hero Section */}
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20 bg-gradient-to-br from-indigo-50 to-white">
-                    <span className="bg-indigo-100 text-primary px-4 py-1 rounded-full text-sm font-semibold tracking-wide mb-6 inline-block">Admissions Open 2024</span>
                     <h1 className="text-5xl md:text-7xl font-extrabold text-secondary mb-6 leading-tight max-w-4xl">
-                        {schoolDetails.tagline}
+                        Smart Education, <br/><span className="text-primary">Anywhere.</span>
                     </h1>
-                    <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl leading-relaxed">
-                        {schoolDetails.about}
+                    <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl">
+                        Access course materials, watch live video lectures, and stay updated with instant campus notices securely using your verified school email.
                     </p>
-                    <div className="flex space-x-4">
-                        <button onClick={() => onNavigate('login')} className="bg-secondary text-white px-8 py-3.5 rounded-full font-semibold hover:bg-gray-800 shadow-lg transition transform hover:-translate-y-0.5">
-                            Student Login
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <button onClick={() => onNavigate('login')} className="bg-secondary text-white px-8 py-4 rounded-full font-bold hover:bg-gray-900 shadow-xl transition transform hover:-translate-y-1">
+                            Secure Campus Login
                         </button>
-                        <button onClick={() => onNavigate('login', 'admin')} className="bg-white text-secondary border border-gray-200 px-8 py-3.5 rounded-full font-semibold hover:bg-gray-50 shadow-sm transition">
-                            Admin Login
-                        </button>
-                    </div>
-                </div>
-
-                {/* Stats Section */}
-                <div className="bg-white py-16 border-t border-gray-100">
-                    <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                        <div>
-                            <div className="text-4xl font-bold text-primary mb-2">{schoolDetails.stats.students}</div>
-                            <div className="text-gray-500 font-medium">Active Students</div>
-                        </div>
-                        <div>
-                            <div className="text-4xl font-bold text-primary mb-2">{schoolDetails.stats.teachers}</div>
-                            <div className="text-gray-500 font-medium">Expert Faculty</div>
-                        </div>
-                        <div>
-                            <div className="text-4xl font-bold text-primary mb-2">{schoolDetails.stats.courses}</div>
-                            <div className="text-gray-500 font-medium">Programs Offered</div>
-                        </div>
                     </div>
                 </div>
             </div>
         );
 
-        // 2. Login Page
-        const LoginPage = ({ onLogin, defaultRole }) => {
-            const [role, setRole] = useState(defaultRole || 'student');
-            const [identifier, setIdentifier] = useState('');
-            const [password, setPassword] = useState('');
+        const LoginPage = ({ onLogin }) => {
+            const [error, setError] = useState('');
+            const [loading, setLoading] = useState(false);
 
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                // Mock Authentication - Accept any credentials for the prototype
-                onLogin({ name: identifier || (role === 'admin' ? 'Admin User' : 'Student User'), role: role });
+            const handleGoogleLogin = () => {
+                setLoading(true);
+                setError('');
+                
+                // Initialize Google Auth Provider
+                const provider = new firebase.auth.GoogleAuthProvider();
+                
+                firebase.auth().signInWithPopup(provider)
+                    .then((result) => {
+                        const email = result.user.email;
+                        
+                        // Check if email exists in our School Database
+                        if (SCHOOL_DB.users[email]) {
+                            onLogin({ ...SCHOOL_DB.users[email], email: email });
+                        } else {
+                            // Valid Google login, but NOT allowed in this app
+                            firebase.auth().signOut();
+                            setError(`Access Denied: ${email} is not registered with ${SCHOOL_DB.name}. Please contact administration.`);
+                        }
+                        setLoading(false);
+                    })
+                    .catch((error) => {
+                        setLoading(false);
+                        if(error.code === 'auth/invalid-api-key') {
+                            setError('API Key is missing! You need to add your Firebase Config to the HTML file.');
+                        } else if (error.code !== 'auth/popup-closed-by-user') {
+                            setError(error.message);
+                        }
+                    });
             };
 
             return (
                 <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 fade-in">
-                    <div className="glass-card w-full max-w-md p-8 rounded-3xl relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-accent"></div>
+                    <div className="glass-card w-full max-w-md p-8 rounded-3xl relative overflow-hidden bg-white shadow-xl">
+                        <div className="absolute top-0 left-0 w-full h-2 bg-primary"></div>
                         
-                        <div className="flex justify-center mb-6 text-primary">
+                        <div className="flex justify-center mb-6 text-primary cursor-pointer" onClick={() => window.location.reload()}>
                             <Icons.GraduationCap />
                         </div>
                         
-                        <h2 className="text-3xl font-bold text-center text-secondary mb-2">Welcome Back</h2>
-                        <p className="text-center text-gray-500 mb-8">Enter your details to access the portal.</p>
+                        <h2 className="text-2xl font-bold text-center text-secondary mb-2">
+                            Secure Login
+                        </h2>
+                        <p className="text-center text-gray-500 mb-8 text-sm">
+                            Please sign in with your official registered email address.
+                        </p>
 
-                        <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
-                            <button 
-                                className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${role === 'student' ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-gray-700'}`}
-                                onClick={() => setRole('student')}
-                            >
-                                Student
-                            </button>
-                            <button 
-                                className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${role === 'admin' ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-gray-700'}`}
-                                onClick={() => setRole('admin')}
-                            >
-                                Admin/Staff
-                            </button>
+                        {error && (
+                            <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 text-center font-medium">
+                                {error}
+                            </div>
+                        )}
+
+                        <button 
+                            onClick={handleGoogleLogin}
+                            disabled={loading} 
+                            className={`w-full bg-white border-2 border-gray-200 text-gray-700 py-3.5 rounded-xl font-bold transition shadow-sm flex items-center justify-center space-x-3 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 hover:border-gray-300'}`}
+                        >
+                            {loading ? (
+                                <span>Authenticating...</span>
+                            ) : (
+                                <>
+                                    <Icons.Google />
+                                    <span>Continue with Google</span>
+                                </>
+                            )}
+                        </button>
+
+                        <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+                            <p className="text-xs text-gray-400">Secured by Google Firebase Authentication</p>
                         </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-5">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number / Student ID</label>
-                                <input 
-                                    type="text" 
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
-                                    placeholder={role === 'student' ? "+1 234 567 8900" : "Admin ID"}
-                                    value={identifier}
-                                    onChange={(e) => setIdentifier(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Password / OTP</label>
-                                <input 
-                                    type="password" 
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="flex items-center justify-between text-sm">
-                                <label className="flex items-center text-gray-500">
-                                    <input type="checkbox" className="mr-2 rounded text-primary focus:ring-primary" /> Remember me
-                                </label>
-                                <a href="#" className="text-primary font-medium hover:underline">Forgot password?</a>
-                            </div>
-                            <button type="submit" className="w-full bg-primary text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 shadow-md transition transform hover:-translate-y-0.5">
-                                Login as {role === 'student' ? 'Student' : 'Admin'}
-                            </button>
-                        </form>
                     </div>
                 </div>
             );
         };
 
-        // 3. Main Application Shell (Sidebar + Content)
-        const DashboardLayout = ({ user, onLogout, children, activeTab, setActiveTab }) => {
-            const navItems = user.role === 'student' 
-                ? [
-                    { id: 'home', label: 'Dashboard', icon: <Icons.Calendar /> },
-                    { id: 'materials', label: 'Study Materials', icon: <Icons.BookOpen /> },
-                    { id: 'videos', label: 'Video Lectures', icon: <Icons.Video /> },
-                  ]
-                : [
-                    { id: 'home', label: 'Admin Panel', icon: <Icons.Settings /> },
-                  ];
+        // --- DASHBOARD LAYOUT & VIEWS ---
 
-            return (
-                <div className="min-h-screen bg-background flex fade-in">
-                    {/* Sidebar */}
-                    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
-                        <div className="p-6 flex items-center space-x-2 text-primary font-bold text-xl">
-                            <Icons.GraduationCap />
-                            <span className="truncate">{schoolDetails.name}</span>
-                        </div>
-                        
-                        <div className="px-6 py-4 border-b border-gray-100 mb-4">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-primary font-bold">
-                                    {user.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-800 text-sm truncate w-32">{user.name}</div>
-                                    <div className="text-xs text-gray-500 capitalize">{user.role}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <nav className="flex-1 px-4 space-y-1">
-                            {navItems.map(item => (
-                                <button 
-                                    key={item.id}
-                                    onClick={() => setActiveTab(item.id)}
-                                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition ${activeTab === item.id ? 'bg-primary text-white shadow-md' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
-                                >
-                                    {item.icon}
-                                    <span>{item.label}</span>
-                                </button>
-                            ))}
-                        </nav>
-
-                        <div className="p-4 border-t border-gray-200">
-                            <button onClick={onLogout} className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition">
-                                <Icons.LogOut />
-                                <span>Log Out</span>
-                            </button>
-                        </div>
-                    </aside>
-
-                    {/* Main Content Area */}
-                    <main className="flex-1 ml-64 p-8">
-                        {/* Header area with Notifications */}
-                        <div className="flex justify-between items-center mb-8">
-                            <div>
-                                <h1 className="text-2xl font-bold text-secondary capitalize">{activeTab.replace('-', ' ')}</h1>
-                                <p className="text-gray-500 text-sm mt-1">Academic Year 2023-2024</p>
-                            </div>
-                            <button className="p-2 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary relative shadow-sm">
-                                <Icons.Bell />
-                                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                            </button>
-                        </div>
-                        
-                        {children}
-                    </main>
-                </div>
-            );
-        };
-
-        // Sub-views for Student Dashboard
-        const StudentHome = () => (
-            <div className="space-y-6 fade-in">
-                {/* Stats Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="glass-card p-6 rounded-2xl flex items-center space-x-4">
-                        <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600"><Icons.User /></div>
-                        <div>
-                            <div className="text-sm text-gray-500 font-medium">Attendance</div>
-                            <div className="text-2xl font-bold text-gray-800">92.5%</div>
-                        </div>
-                    </div>
-                    <div className="glass-card p-6 rounded-2xl flex items-center space-x-4">
-                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><Icons.BookOpen /></div>
-                        <div>
-                            <div className="text-sm text-gray-500 font-medium">Next Class</div>
-                            <div className="text-xl font-bold text-gray-800 truncate">Physics</div>
-                        </div>
-                    </div>
-                    <div className="glass-card p-6 rounded-2xl flex items-center space-x-4">
-                        <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600"><Icons.Calendar /></div>
-                        <div>
-                            <div className="text-sm text-gray-500 font-medium">Upcoming Exams</div>
-                            <div className="text-2xl font-bold text-gray-800">3 Days</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Timetable */}
-                    <div className="lg:col-span-2 glass-card rounded-2xl p-6">
-                        <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Calendar /><span className="ml-2">Today's Timetable</span></h3>
-                        <div className="space-y-4">
-                            {mockTimetable.map((cls, idx) => (
-                                <div key={idx} className="flex items-center p-4 border border-gray-100 rounded-xl hover:shadow-sm transition bg-white">
-                                    <div className="w-24 text-sm font-bold text-primary">{cls.time}</div>
-                                    <div className="flex-1">
-                                        <div className="font-semibold text-gray-800">{cls.subject}</div>
-                                        <div className="text-xs text-gray-500">{cls.teacher}</div>
-                                    </div>
-                                    <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600 font-medium">{cls.subject === "Lunch Break" ? 'Break' : 'Room 302'}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Notice Board */}
-                    <div className="glass-card rounded-2xl p-6 bg-gradient-to-b from-white to-indigo-50/30">
-                        <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Bell /><span className="ml-2">Notice Board</span></h3>
-                        <div className="space-y-4">
-                            {mockNotices.map(notice => (
-                                <div key={notice.id} className="p-4 bg-white border border-gray-100 rounded-xl shadow-sm border-l-4 border-l-primary">
-                                    <div className="flex justify-between items-start mb-1">
-                                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${notice.type === 'Urgent' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>{notice.type}</span>
-                                        <span className="text-xs text-gray-400 font-medium">{notice.date}</span>
-                                    </div>
-                                    <p className="text-sm font-semibold text-gray-800 mt-2">{notice.title}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-
-        const StudentMaterials = () => (
-            <div className="glass-card p-6 rounded-2xl fade-in min-h-[60vh]">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-lg font-bold text-secondary">Course Syllabus & PDFs</h3>
-                    <select className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 outline-none focus:border-primary">
-                        <option>All Subjects</option>
-                        <option>Mathematics</option>
-                        <option>Physics</option>
-                        <option>Computer Science</option>
-                    </select>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {mockMaterials.map(mat => (
-                        <div key={mat.id} className="border border-gray-100 p-5 rounded-xl flex items-center justify-between hover:shadow-md transition bg-white group cursor-pointer">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-500">
-                                    <Icons.BookOpen />
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-gray-800 text-sm truncate w-32">{mat.title}</p>
-                                    <p className="text-xs text-gray-400 mt-0.5">{mat.subject} • {mat.size}</p>
-                                </div>
-                            </div>
-                            <button className="text-gray-400 group-hover:text-primary transition p-2 bg-gray-50 rounded-full group-hover:bg-indigo-50">
-                                <Icons.Download />
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-
-        const StudentVideos = () => (
-            <div className="fade-in min-h-[60vh]">
-                <h3 className="text-lg font-bold text-secondary mb-6">Informative Class Videos</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {mockVideos.map(video => (
-                        <div key={video.id} className="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition cursor-pointer group bg-white">
-                            <div className="h-40 bg-gray-200 relative overflow-hidden">
-                                <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition flex items-center justify-center">
-                                    <div className="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-primary shadow-lg transform group-hover:scale-110 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                                    </div>
-                                </div>
-                                <span className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded font-medium backdrop-blur-sm">{video.duration}</span>
-                            </div>
-                            <div className="p-5">
-                                <h4 className="font-bold text-gray-800 mb-1 line-clamp-1">{video.title}</h4>
-                                <p className="text-sm text-gray-500 flex items-center">
-                                    <span className="w-5 h-5 rounded-full bg-gray-200 mr-2 flex items-center justify-center text-[10px] text-gray-600">{video.teacher.charAt(0)}</span>
-                                    Uploaded by {video.teacher}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-
-        // Mock Admin View
-        const AdminHome = () => (
-            <div className="fade-in space-y-6">
-                <div className="bg-gradient-to-r from-primary to-indigo-800 rounded-2xl p-8 text-white shadow-lg">
-                    <h2 className="text-2xl font-bold mb-2">Welcome to Admin Control</h2>
-                    <p className="text-indigo-100 opacity-90 max-w-2xl">From here you can manage students, update the academic calendar, post notices, and upload syllabus PDFs.</p>
-                    <div className="mt-6 flex space-x-3">
-                        <button className="bg-white text-primary px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition">Add New Notice</button>
-                        <button className="bg-indigo-700 border border-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-indigo-600 transition">Manage Timetable</button>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="glass-card p-6 rounded-2xl">
-                        <h3 className="font-bold text-secondary mb-4 border-b pb-2">Recent System Activity</h3>
-                        <ul className="space-y-3 text-sm text-gray-600">
-                            <li className="flex justify-between"><span>Prof. Jenkins uploaded 'Calculus PDF'</span> <span className="text-gray-400">10 mins ago</span></li>
-                            <li className="flex justify-between"><span>New student registration (ID: #4092)</span> <span className="text-gray-400">1 hr ago</span></li>
-                            <li className="flex justify-between"><span>Mid-Term Notice broadcasted</span> <span className="text-gray-400">3 hrs ago</span></li>
-                        </ul>
-                    </div>
-                    <div className="glass-card p-6 rounded-2xl bg-gray-50 border border-dashed border-gray-300 flex flex-col items-center justify-center text-center">
-                        <Icons.Settings />
-                        <h3 className="font-bold text-secondary mt-2">More Modules coming soon</h3>
-                        <p className="text-sm text-gray-500 mt-1">Attendance tracking and Fee management UI can be added here.</p>
-                    </div>
-                </div>
-            </div>
-        )
-
-
-        // --- MAIN APP COMPONENT ---
         const App = () => {
-            const [view, setView] = useState('landing'); // landing, login, dashboard
+            const [view, setView] = useState('landing');
             const [user, setUser] = useState(null);
-            const [activeTab, setActiveTab] = useState('home'); // home, materials, videos
+            const [activeTab, setActiveTab] = useState('home');
 
-            const navigateTo = (targetView, roleObj = null) => {
-                setView(targetView);
-                if (roleObj) window.tempRole = roleObj; // simple way to pass role intent to login
-            };
+            const [notices, setNotices] = useState([
+                { id: 1, date: "Today", title: "Mid-Term Results Announced", type: "Important" }
+            ]);
+            
+            const [videos, setVideos] = useState([
+                { id: 1, title: "Newton's Laws Explained", teacher: "Dr. Grant", subject: "Physics", url: "https://www.youtube.com/embed/p_o4aY7vkXg" }
+            ]);
+
+            const [pulseStats, setPulseStats] = useState({ happy: 45, neutral: 12, stressed: 8 });
+
+            // Automatically log in if user already has an active session
+            useEffect(() => {
+                firebase.auth().onAuthStateChanged((firebaseUser) => {
+                    if (firebaseUser) {
+                        const email = firebaseUser.email;
+                        if (SCHOOL_DB.users[email]) {
+                            setUser({ ...SCHOOL_DB.users[email], email: email });
+                            setView('dashboard');
+                        } else {
+                            firebase.auth().signOut();
+                        }
+                    }
+                });
+            }, []);
 
             const handleLogin = (userData) => {
                 setUser(userData);
                 setActiveTab('home');
                 setView('dashboard');
+                window.scrollTo(0,0);
             };
 
             const handleLogout = () => {
-                setUser(null);
-                setView('landing');
+                firebase.auth().signOut().then(() => {
+                    setUser(null);
+                    setView('landing');
+                    window.scrollTo(0,0);
+                });
             };
 
-            return (
-                <div className="text-gray-800 antialiased selection:bg-primary selection:text-white">
-                    {view === 'landing' && <LandingPage onNavigate={navigateTo} />}
-                    {view === 'login' && <LoginPage onLogin={handleLogin} defaultRole={window.tempRole} />}
-                    {view === 'dashboard' && user && (
-                        <DashboardLayout user={user} onLogout={handleLogout} activeTab={activeTab} setActiveTab={setActiveTab}>
-                            {user.role === 'student' && activeTab === 'home' && <StudentHome />}
-                            {user.role === 'student' && activeTab === 'materials' && <StudentMaterials />}
-                            {user.role === 'student' && activeTab === 'videos' && <StudentVideos />}
-                            
-                            {user.role === 'admin' && activeTab === 'home' && <AdminHome />}
-                        </DashboardLayout>
+            // Admin Functions
+            const addNotice = (title, type) => setNotices([{ id: Date.now(), date: "Just now", title, type }, ...notices]);
+            const deleteNotice = (id) => setNotices(notices.filter(n => n.id !== id));
+            const addVideo = (title, teacher, subject, rawUrl) => {
+                const embedUrl = getYoutubeEmbedUrl(rawUrl);
+                if (!embedUrl) return alert("Invalid YouTube URL");
+                setVideos([{ id: Date.now(), title, teacher, subject, url: embedUrl }, ...videos]);
+            };
+            const deleteVideo = (id) => setVideos(videos.filter(v => v.id !== id));
+
+
+            const StudentHome = () => {
+                const [voted, setVoted] = useState(false);
+                const handlePulseVote = (type) => {
+                    if(voted) return;
+                    setPulseStats(prev => ({...prev, [type]: prev[type] + 1}));
+                    setVoted(true);
+                }
+                return (
+                    <div className="space-y-6 fade-in">
+                        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 text-white shadow-md flex flex-col md:flex-row items-center justify-between">
+                            <div>
+                                <h3 className="text-xl font-bold flex items-center"><Icons.Activity /> <span className="ml-2">Campus Pulse Check</span></h3>
+                                <p className="text-blue-100 text-sm mt-1">How are you feeling about your learning today?</p>
+                            </div>
+                            <div className="flex space-x-3 mt-4 md:mt-0">
+                                <button onClick={()=>handlePulseVote('happy')} className={`text-3xl hover:scale-110 transition ${voted?'opacity-50 cursor-not-allowed':''}`}>😊</button>
+                                <button onClick={()=>handlePulseVote('neutral')} className={`text-3xl hover:scale-110 transition ${voted?'opacity-50 cursor-not-allowed':''}`}>😐</button>
+                                <button onClick={()=>handlePulseVote('stressed')} className={`text-3xl hover:scale-110 transition ${voted?'opacity-50 cursor-not-allowed':''}`}>😫</button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-96 overflow-y-auto">
+                                <h3 className="text-lg font-bold text-secondary mb-4 flex items-center sticky top-0 bg-white pb-2"><Icons.Bell /><span className="ml-2">Live Notices</span></h3>
+                                <div className="space-y-3">
+                                    {notices.map(notice => (
+                                        <div key={notice.id} className="p-4 bg-gray-50 rounded-xl border-l-4 border-primary">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full">{notice.type}</span>
+                                                <span className="text-xs text-gray-400">{notice.date}</span>
+                                            </div>
+                                            <p className="text-sm font-semibold text-gray-800 mt-2">{notice.title}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                                <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Calendar /><span className="ml-2">Today's Schedule</span></h3>
+                                <div className="space-y-3">
+                                    {SCHOOL_DB.timetable.map((cls, idx) => (
+                                        <div key={idx} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition border border-transparent hover:border-gray-100">
+                                            <div className="w-20 text-xs font-bold text-primary">{cls.time}</div>
+                                            <div className="flex-1">
+                                                <div className="font-semibold text-gray-800 text-sm">{cls.subject}</div>
+                                                <div className="text-xs text-gray-500">{cls.teacher}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const StudentVideos = () => (
+                <div className="fade-in space-y-6">
+                    <h3 className="text-xl font-bold text-secondary border-b pb-2">Class Lectures (YouTube Embedded)</h3>
+                    {videos.length === 0 ? (
+                        <div className="text-center py-10 text-gray-400 bg-white rounded-xl shadow-sm">No videos uploaded yet.</div>
+                    ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {videos.map(video => (
+                                <div key={video.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                                    <div className="aspect-video bg-black relative">
+                                        <iframe src={video.url} className="absolute top-0 left-0 w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                                    </div>
+                                    <div className="p-4">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1 block">{video.subject}</span>
+                                        <h4 className="font-bold text-gray-800 mb-1">{video.title}</h4>
+                                        <p className="text-xs text-gray-500">By {video.teacher}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     )}
+                </div>
+            );
+
+            const AdminDashboard = () => {
+                const [newVidUrl, setNewVidUrl] = useState('');
+                const [newVidTitle, setNewVidTitle] = useState('');
+                const [newVidSubject, setNewVidSubject] = useState('');
+                const [newNotice, setNewNotice] = useState('');
+                const [noticeType, setNoticeType] = useState('Info');
+
+                const handleAddVideo = (e) => { e.preventDefault(); addVideo(newVidTitle, user.name, newVidSubject, newVidUrl); setNewVidUrl(''); setNewVidTitle(''); setNewVidSubject(''); };
+                const handleAddNotice = (e) => { e.preventDefault(); addNotice(newNotice, noticeType); setNewNotice(''); }
+
+                return (
+                    <div className="fade-in space-y-8 pb-10">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center">
+                                <div><p className="text-sm text-gray-500">Total Users</p><p className="text-2xl font-bold">1,204</p></div>
+                                <div className="p-3 bg-blue-50 text-blue-500 rounded-lg"><Icons.User /></div>
+                            </div>
+                            <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center">
+                                <div><p className="text-sm text-gray-500">Active Videos</p><p className="text-2xl font-bold">{videos.length}</p></div>
+                                <div className="p-3 bg-red-50 text-red-500 rounded-lg"><Icons.Video /></div>
+                            </div>
+                            <div className="bg-gradient-to-br from-indigo-500 to-primary p-5 rounded-xl shadow-sm text-white">
+                                <p className="text-sm text-indigo-100 mb-1">Campus Pulse (Today)</p>
+                                <div className="flex justify-between text-sm">
+                                    <span>😊 {pulseStats.happy}</span><span>😐 {pulseStats.neutral}</span><span>😫 {pulseStats.stressed}</span>
+                                </div>
+                                <div className="w-full bg-indigo-900/50 h-1.5 mt-2 rounded-full overflow-hidden flex">
+                                    <div style={{width: `${(pulseStats.happy/(pulseStats.happy+pulseStats.neutral+pulseStats.stressed))*100}%`}} className="bg-green-400 h-full"></div>
+                                    <div style={{width: `${(pulseStats.neutral/(pulseStats.happy+pulseStats.neutral+pulseStats.stressed))*100}%`}} className="bg-yellow-400 h-full"></div>
+                                    <div style={{width: `${(pulseStats.stressed/(pulseStats.happy+pulseStats.neutral+pulseStats.stressed))*100}%`}} className="bg-red-400 h-full"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Video /><span className="ml-2">Manage Videos</span></h3>
+                                <form onSubmit={handleAddVideo} className="bg-gray-50 p-4 rounded-xl mb-6 space-y-3">
+                                    <input type="text" placeholder="Video Title" value={newVidTitle} onChange={e=>setNewVidTitle(e.target.value)} required className="w-full text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
+                                    <div className="flex space-x-2">
+                                        <input type="text" placeholder="Subject" value={newVidSubject} onChange={e=>setNewVidSubject(e.target.value)} required className="w-1/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
+                                        <input type="url" placeholder="YouTube URL" value={newVidUrl} onChange={e=>setNewVidUrl(e.target.value)} required className="w-2/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
+                                    </div>
+                                    <button type="submit" className="w-full bg-secondary text-white py-2 rounded-lg text-sm font-bold hover:bg-gray-900 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Embed Video</span></button>
+                                </form>
+                                <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+                                    {videos.map(v => (
+                                        <div key={v.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                                            <div className="truncate pr-4"><p className="text-sm font-bold text-gray-800 truncate">{v.title}</p><p className="text-xs text-gray-500">{v.subject}</p></div>
+                                            <button onClick={()=>deleteVideo(v.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"><Icons.Trash /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Bell /><span className="ml-2">Manage Notices</span></h3>
+                                <form onSubmit={handleAddNotice} className="bg-gray-50 p-4 rounded-xl mb-6 space-y-3">
+                                    <div className="flex space-x-2">
+                                        <select value={noticeType} onChange={e=>setNoticeType(e.target.value)} className="w-1/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary bg-white">
+                                            <option>Info</option><option>Urgent</option><option>Holiday</option>
+                                        </select>
+                                        <input type="text" placeholder="Notice Title/Message" value={newNotice} onChange={e=>setNewNotice(e.target.value)} required className="w-2/3 text-sm px-3 py-2 rounded-lg border outline-none focus:border-primary" />
+                                    </div>
+                                    <button type="submit" className="w-full bg-primary text-white py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Publish Notice</span></button>
+                                </form>
+                                <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+                                    {notices.map(n => (
+                                        <div key={n.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                                            <div className="truncate pr-4"><p className="text-sm font-bold text-gray-800 truncate">{n.title}</p><span className="text-[10px] uppercase bg-gray-100 px-2 py-0.5 rounded text-gray-600">{n.type}</span></div>
+                                            <button onClick={()=>deleteNotice(n.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"><Icons.Trash /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            if (view === 'landing') return <LandingPage onNavigate={setView} />;
+            if (view === 'login') return <LoginPage onLogin={handleLogin} />;
+            
+            const navItems = user?.role === 'student' 
+                ? [ { id: 'home', label: 'Dashboard', icon: <Icons.Calendar /> }, { id: 'videos', label: 'Live Videos', icon: <Icons.Video /> } ]
+                : [ { id: 'home', label: 'Control Center', icon: <Icons.Settings /> } ];
+
+            return (
+                <div className="min-h-screen bg-background flex flex-col md:flex-row">
+                    <aside className="w-full md:w-64 bg-white border-r border-gray-200 flex flex-col md:fixed md:h-full z-10 shadow-sm">
+                        <div className="p-6 flex items-center space-x-2 text-primary font-bold text-xl border-b border-gray-50">
+                            <Icons.GraduationCap /> <span className="truncate">{SCHOOL_DB.name}</span>
+                        </div>
+                        <div className="p-6 flex items-center space-x-3 bg-gray-50/50">
+                            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-primary font-bold shadow-inner">{user.name.charAt(0)}</div>
+                            <div className="overflow-hidden">
+                                <div className="font-bold text-gray-800 text-sm truncate">{user.name}</div>
+                                <div className="text-xs text-primary font-medium uppercase tracking-wider">{user.role}</div>
+                            </div>
+                        </div>
+                        <nav className="flex-1 px-4 py-6 space-y-2 flex md:flex-col overflow-x-auto md:overflow-visible border-y md:border-y-0 border-gray-100">
+                            {navItems.map(item => (
+                                <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex-shrink-0 md:w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-bold transition ${activeTab === item.id ? 'bg-primary text-white shadow-md' : 'text-gray-500 hover:bg-indigo-50 hover:text-primary'}`}>
+                                    {item.icon} <span className="md:inline">{item.label}</span>
+                                </button>
+                            ))}
+                        </nav>
+                        <div className="p-4 md:mt-auto hidden md:block">
+                            <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl text-sm font-bold text-red-500 bg-red-50 hover:bg-red-100 transition">
+                                <Icons.LogOut /> <span>Secure Logout</span>
+                            </button>
+                        </div>
+                    </aside>
+                    <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-y-auto">
+                        <div className="flex justify-between items-center mb-8">
+                            <div>
+                                <h1 className="text-3xl font-extrabold text-secondary capitalize">{activeTab}</h1>
+                                <p className="text-gray-500 text-sm mt-1">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            </div>
+                            <button onClick={handleLogout} className="md:hidden p-2 rounded-full bg-red-50 text-red-500 shadow-sm"><Icons.LogOut /></button>
+                        </div>
+                        {user?.role === 'student' && activeTab === 'home' && <StudentHome />}
+                        {user?.role === 'student' && activeTab === 'videos' && <StudentVideos />}
+                        {user?.role === 'admin' && activeTab === 'home' && <AdminDashboard />}
+                    </main>
                 </div>
             );
         };

@@ -25,17 +25,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build Web App
-        run: npx expo export
-
-      - name: Fix GitHub Pages 404 Error
-        # This stops GitHub from ignoring folders that start with an underscore
-        run: touch dist/.nojekyll
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

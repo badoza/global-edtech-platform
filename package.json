@@ -1,11 +1,12 @@
 {
   "name": "edtech-core",
   "version": "1.0.0",
+  "homepage": "https://badoza.github.io/global-edtech-platform",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "web": "expo start --web",
-    "build": "expo export"
+    "build": "npx expo export"
   },
   "dependencies": {
     "expo": "~49.0.15",
@@ -16,5 +17,9 @@
     "@expo/metro-runtime": "~3.0.0",
     "@supabase/supabase-js": "^2.38.4",
     "react-native-calendars": "^1.1301.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "babel-preset-expo": "~9.5.2"
   }
 }

@@ -1,15 +1,19 @@
 name: Deploy Next.js site to Pages
+
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: "pages"
   cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,6 +32,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path:./out
+
   deploy:
     environment:
       name: github-pages

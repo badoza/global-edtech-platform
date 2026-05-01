@@ -15,10 +15,6 @@
     <!-- Babel to compile JSX -->
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- FIREBASE LIBRARIES -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -44,22 +40,6 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // ==========================================
-        // 🛑 1. REPLACE THIS WITH YOUR FIREBASE CONFIG
-        // ==========================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBWSyHuI-cMgAuWHHA_NNlTPHB_Y41M7kk",
-            authDomain: "global-edtech-eee16.firebaseapp.com",
-            projectId: "global-edtech-eee16",
-            storageBucket: "global-edtech-eee16.firebasestorage.app",
-            messagingSenderId: "271775682075",
-            appId: "1:271775682075:web:31e6aa52c5a32a254db2be"
-        };
-        
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
         const { useState, useEffect } = React;
 
         // --- ICONS ---
@@ -74,27 +54,41 @@
             LogOut: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
             Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
             Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
-            Activity: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>,
-            Google: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Activity: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
         };
 
-        // ==========================================
-        // 🛑 2. ADD YOUR ALLOWED EMAILS HERE
-        // ==========================================
-        const SCHOOL_DB = {
+        // --- LOCAL DATABASE SETUP (Auto-Syncing) ---
+        const DEFAULT_DATA = {
             name: "Apex Global Academy",
             users: {
-                // Change these to real Gmail addresses to test!
-                "dodge.kunal@gmail.com": { name: "Admin Principal", role: "admin" },
-                "student@gmail.com": { name: "John Student", role: "student", grade: "10th" },
-                "parent@gmail.com": { name: "Sarah Parent", role: "student", grade: "12th" }
+                "admin@school.com": { name: "Principal Carter", role: "admin" },
+                "student@school.com": { name: "John Student", role: "student", grade: "10th" },
+                "parent@school.com": { name: "Sarah Parent", role: "student", grade: "12th" }
             },
             timetable: [
                 { time: "09:00 AM", subject: "Advanced Mathematics", teacher: "Prof. Jenkins" },
                 { time: "10:30 AM", subject: "Physics (Theory)", teacher: "Dr. Grant" },
                 { time: "12:00 PM", subject: "Lunch Break", teacher: "-" },
                 { time: "01:00 PM", subject: "Computer Science", teacher: "Mr. Chen" }
+            ],
+            notices: [
+                { id: 1, date: "Today", title: "Welcome to the new digital platform!", type: "Info" }
+            ],
+            videos: [
+                { id: 1, title: "Newton's Laws Explained", teacher: "Dr. Grant", subject: "Physics", url: "https://www.youtube.com/embed/p_o4aY7vkXg" }
             ]
+        };
+
+        // Load data from browser storage, or use defaults if first time
+        const loadDB = () => {
+            const saved = localStorage.getItem('GlobalEdTechDB');
+            if (saved) return JSON.parse(saved);
+            localStorage.setItem('GlobalEdTechDB', JSON.stringify(DEFAULT_DATA));
+            return DEFAULT_DATA;
+        };
+
+        const saveDB = (newData) => {
+            localStorage.setItem('GlobalEdTechDB', JSON.stringify(newData));
         };
 
         const getYoutubeEmbedUrl = (url) => {
@@ -109,12 +103,14 @@
         };
 
 
-        const LandingPage = ({ onNavigate }) => (
+        // --- COMPONENTS ---
+
+        const LandingPage = ({ onNavigate, db }) => (
             <div className="min-h-screen flex flex-col fade-in bg-white">
                 <nav className="bg-white px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
                     <div className="flex items-center space-x-2 text-primary font-bold text-2xl">
                         <Icons.GraduationCap />
-                        <span>{SCHOOL_DB.name}</span>
+                        <span>{db.name}</span>
                     </div>
                     <button onClick={() => onNavigate('login')} className="bg-primary text-white px-6 py-2.5 rounded-full font-medium hover:bg-indigo-700 shadow transition">Login Portal</button>
                 </nav>
@@ -131,43 +127,40 @@
                             Secure Campus Login
                         </button>
                     </div>
+
+                    <div className="mt-16 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-left max-w-md w-full">
+                        <p className="text-sm text-gray-500 font-bold mb-3 uppercase tracking-wider">Prototype Demo Accounts</p>
+                        <div className="space-y-2 text-sm">
+                            <p><strong>Admin:</strong> admin@school.com</p>
+                            <p><strong>Student:</strong> student@school.com</p>
+                            <p className="text-xs text-gray-400 mt-2 italic">(Any password will work for the demo)</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
 
-        const LoginPage = ({ onLogin }) => {
+        const LoginPage = ({ onLogin, db }) => {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
             const [error, setError] = useState('');
             const [loading, setLoading] = useState(false);
 
-            const handleGoogleLogin = () => {
+            const handleLogin = (e) => {
+                e.preventDefault();
                 setLoading(true);
                 setError('');
                 
-                // Initialize Google Auth Provider
-                const provider = new firebase.auth.GoogleAuthProvider();
-                
-                firebase.auth().signInWithPopup(provider)
-                    .then((result) => {
-                        const email = result.user.email;
-                        
-                        // Check if email exists in our School Database
-                        if (SCHOOL_DB.users[email]) {
-                            onLogin({ ...SCHOOL_DB.users[email], email: email });
-                        } else {
-                            // Valid Google login, but NOT allowed in this app
-                            firebase.auth().signOut();
-                            setError(`Access Denied: ${email} is not registered with ${SCHOOL_DB.name}. Please contact administration.`);
-                        }
-                        setLoading(false);
-                    })
-                    .catch((error) => {
-                        setLoading(false);
-                        if(error.code === 'auth/invalid-api-key') {
-                            setError('API Key is missing! You need to add your Firebase Config to the HTML file.');
-                        } else if (error.code !== 'auth/popup-closed-by-user') {
-                            setError(error.message);
-                        }
-                    });
+                // Simulate network delay for realism
+                setTimeout(() => {
+                    const userAccount = db.users[email.toLowerCase()];
+                    if (userAccount) {
+                        onLogin({ ...userAccount, email: email });
+                    } else {
+                        setError(`Account not found. Please use the demo emails provided on the home page.`);
+                    }
+                    setLoading(false);
+                }, 800);
             };
 
             return (
@@ -179,12 +172,8 @@
                             <Icons.GraduationCap />
                         </div>
                         
-                        <h2 className="text-2xl font-bold text-center text-secondary mb-2">
-                            Secure Login
-                        </h2>
-                        <p className="text-center text-gray-500 mb-8 text-sm">
-                            Please sign in with your official registered email address.
-                        </p>
+                        <h2 className="text-2xl font-bold text-center text-secondary mb-2">Secure Login</h2>
+                        <p className="text-center text-gray-500 mb-8 text-sm">Sign in to access your campus dashboard.</p>
 
                         {error && (
                             <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 text-center font-medium">
@@ -192,24 +181,37 @@
                             </div>
                         )}
 
-                        <button 
-                            onClick={handleGoogleLogin}
-                            disabled={loading} 
-                            className={`w-full bg-white border-2 border-gray-200 text-gray-700 py-3.5 rounded-xl font-bold transition shadow-sm flex items-center justify-center space-x-3 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 hover:border-gray-300'}`}
-                        >
-                            {loading ? (
-                                <span>Authenticating...</span>
-                            ) : (
-                                <>
-                                    <Icons.Google />
-                                    <span>Continue with Google</span>
-                                </>
-                            )}
-                        </button>
-
-                        <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-                            <p className="text-xs text-gray-400">Secured by Google Firebase Authentication</p>
-                        </div>
+                        <form onSubmit={handleLogin} className="space-y-5">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Registered Email</label>
+                                <input 
+                                    type="email" 
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-sm"
+                                    placeholder="e.g. admin@school.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <input 
+                                    type="password" 
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-sm"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <button 
+                                type="submit"
+                                disabled={loading} 
+                                className={`w-full bg-primary text-white py-3.5 rounded-xl font-bold transition shadow-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
+                            >
+                                {loading ? 'Authenticating...' : 'Sign In'}
+                            </button>
+                        </form>
                     </div>
                 </div>
             );
@@ -221,56 +223,60 @@
             const [view, setView] = useState('landing');
             const [user, setUser] = useState(null);
             const [activeTab, setActiveTab] = useState('home');
-
-            const [notices, setNotices] = useState([
-                { id: 1, date: "Today", title: "Mid-Term Results Announced", type: "Important" }
-            ]);
             
-            const [videos, setVideos] = useState([
-                { id: 1, title: "Newton's Laws Explained", teacher: "Dr. Grant", subject: "Physics", url: "https://www.youtube.com/embed/p_o4aY7vkXg" }
-            ]);
-
+            // Database State
+            const [db, setDb] = useState(loadDB());
             const [pulseStats, setPulseStats] = useState({ happy: 45, neutral: 12, stressed: 8 });
 
-            // Automatically log in if user already has an active session
+            // Check session on load
             useEffect(() => {
-                firebase.auth().onAuthStateChanged((firebaseUser) => {
-                    if (firebaseUser) {
-                        const email = firebaseUser.email;
-                        if (SCHOOL_DB.users[email]) {
-                            setUser({ ...SCHOOL_DB.users[email], email: email });
-                            setView('dashboard');
-                        } else {
-                            firebase.auth().signOut();
-                        }
-                    }
-                });
+                const session = localStorage.getItem('activeUser');
+                if (session) {
+                    setUser(JSON.parse(session));
+                    setView('dashboard');
+                }
             }, []);
 
             const handleLogin = (userData) => {
                 setUser(userData);
+                localStorage.setItem('activeUser', JSON.stringify(userData));
                 setActiveTab('home');
                 setView('dashboard');
                 window.scrollTo(0,0);
             };
 
             const handleLogout = () => {
-                firebase.auth().signOut().then(() => {
-                    setUser(null);
-                    setView('landing');
-                    window.scrollTo(0,0);
-                });
+                setUser(null);
+                localStorage.removeItem('activeUser');
+                setView('landing');
+                window.scrollTo(0,0);
             };
 
-            // Admin Functions
-            const addNotice = (title, type) => setNotices([{ id: Date.now(), date: "Just now", title, type }, ...notices]);
-            const deleteNotice = (id) => setNotices(notices.filter(n => n.id !== id));
+            // Database Actions (Updates state AND LocalStorage so it persists)
+            const updateDB = (newDB) => {
+                setDb(newDB);
+                saveDB(newDB);
+            };
+
+            const addNotice = (title, type) => {
+                const newDB = { ...db, notices: [{ id: Date.now(), date: "Just now", title, type }, ...db.notices] };
+                updateDB(newDB);
+            };
+            const deleteNotice = (id) => {
+                const newDB = { ...db, notices: db.notices.filter(n => n.id !== id) };
+                updateDB(newDB);
+            };
+
             const addVideo = (title, teacher, subject, rawUrl) => {
                 const embedUrl = getYoutubeEmbedUrl(rawUrl);
-                if (!embedUrl) return alert("Invalid YouTube URL");
-                setVideos([{ id: Date.now(), title, teacher, subject, url: embedUrl }, ...videos]);
+                if (!embedUrl) return alert("Invalid YouTube URL. Please use a standard YouTube link.");
+                const newDB = { ...db, videos: [{ id: Date.now(), title, teacher, subject, url: embedUrl }, ...db.videos] };
+                updateDB(newDB);
             };
-            const deleteVideo = (id) => setVideos(videos.filter(v => v.id !== id));
+            const deleteVideo = (id) => {
+                const newDB = { ...db, videos: db.videos.filter(v => v.id !== id) };
+                updateDB(newDB);
+            };
 
 
             const StudentHome = () => {
@@ -298,7 +304,8 @@
                             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-96 overflow-y-auto">
                                 <h3 className="text-lg font-bold text-secondary mb-4 flex items-center sticky top-0 bg-white pb-2"><Icons.Bell /><span className="ml-2">Live Notices</span></h3>
                                 <div className="space-y-3">
-                                    {notices.map(notice => (
+                                    {db.notices.length === 0 ? <p className="text-sm text-gray-400">No active notices.</p> : null}
+                                    {db.notices.map(notice => (
                                         <div key={notice.id} className="p-4 bg-gray-50 rounded-xl border-l-4 border-primary">
                                             <div className="flex justify-between items-center mb-1">
                                                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full">{notice.type}</span>
@@ -312,7 +319,7 @@
                             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                                 <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Calendar /><span className="ml-2">Today's Schedule</span></h3>
                                 <div className="space-y-3">
-                                    {SCHOOL_DB.timetable.map((cls, idx) => (
+                                    {db.timetable.map((cls, idx) => (
                                         <div key={idx} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition border border-transparent hover:border-gray-100">
                                             <div className="w-20 text-xs font-bold text-primary">{cls.time}</div>
                                             <div className="flex-1">
@@ -330,12 +337,12 @@
 
             const StudentVideos = () => (
                 <div className="fade-in space-y-6">
-                    <h3 className="text-xl font-bold text-secondary border-b pb-2">Class Lectures (YouTube Embedded)</h3>
-                    {videos.length === 0 ? (
-                        <div className="text-center py-10 text-gray-400 bg-white rounded-xl shadow-sm">No videos uploaded yet.</div>
+                    <h3 className="text-xl font-bold text-secondary border-b pb-2">Class Lectures</h3>
+                    {db.videos.length === 0 ? (
+                        <div className="text-center py-10 text-gray-400 bg-white rounded-xl shadow-sm border border-gray-100">No videos uploaded yet.</div>
                     ) : (
-                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {videos.map(video => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {db.videos.map(video => (
                                 <div key={video.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                                     <div className="aspect-video bg-black relative">
                                         <iframe src={video.url} className="absolute top-0 left-0 w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
@@ -370,7 +377,7 @@
                                 <div className="p-3 bg-blue-50 text-blue-500 rounded-lg"><Icons.User /></div>
                             </div>
                             <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center">
-                                <div><p className="text-sm text-gray-500">Active Videos</p><p className="text-2xl font-bold">{videos.length}</p></div>
+                                <div><p className="text-sm text-gray-500">Active Videos</p><p className="text-2xl font-bold">{db.videos.length}</p></div>
                                 <div className="p-3 bg-red-50 text-red-500 rounded-lg"><Icons.Video /></div>
                             </div>
                             <div className="bg-gradient-to-br from-indigo-500 to-primary p-5 rounded-xl shadow-sm text-white">
@@ -386,7 +393,7 @@
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                                 <h3 className="text-lg font-bold text-secondary mb-4 flex items-center"><Icons.Video /><span className="ml-2">Manage Videos</span></h3>
                                 <form onSubmit={handleAddVideo} className="bg-gray-50 p-4 rounded-xl mb-6 space-y-3">
@@ -398,7 +405,7 @@
                                     <button type="submit" className="w-full bg-secondary text-white py-2 rounded-lg text-sm font-bold hover:bg-gray-900 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Embed Video</span></button>
                                 </form>
                                 <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
-                                    {videos.map(v => (
+                                    {db.videos.map(v => (
                                         <div key={v.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
                                             <div className="truncate pr-4"><p className="text-sm font-bold text-gray-800 truncate">{v.title}</p><p className="text-xs text-gray-500">{v.subject}</p></div>
                                             <button onClick={()=>deleteVideo(v.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"><Icons.Trash /></button>
@@ -418,7 +425,7 @@
                                     <button type="submit" className="w-full bg-primary text-white py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center"><Icons.Plus /><span className="ml-1">Publish Notice</span></button>
                                 </form>
                                 <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
-                                    {notices.map(n => (
+                                    {db.notices.map(n => (
                                         <div key={n.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
                                             <div className="truncate pr-4"><p className="text-sm font-bold text-gray-800 truncate">{n.title}</p><span className="text-[10px] uppercase bg-gray-100 px-2 py-0.5 rounded text-gray-600">{n.type}</span></div>
                                             <button onClick={()=>deleteNotice(n.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"><Icons.Trash /></button>
@@ -431,8 +438,8 @@
                 );
             };
 
-            if (view === 'landing') return <LandingPage onNavigate={setView} />;
-            if (view === 'login') return <LoginPage onLogin={handleLogin} />;
+            if (view === 'landing') return <LandingPage onNavigate={setView} db={db} />;
+            if (view === 'login') return <LoginPage onLogin={handleLogin} db={db} />;
             
             const navItems = user?.role === 'student' 
                 ? [ { id: 'home', label: 'Dashboard', icon: <Icons.Calendar /> }, { id: 'videos', label: 'Live Videos', icon: <Icons.Video /> } ]
@@ -442,7 +449,7 @@
                 <div className="min-h-screen bg-background flex flex-col md:flex-row">
                     <aside className="w-full md:w-64 bg-white border-r border-gray-200 flex flex-col md:fixed md:h-full z-10 shadow-sm">
                         <div className="p-6 flex items-center space-x-2 text-primary font-bold text-xl border-b border-gray-50">
-                            <Icons.GraduationCap /> <span className="truncate">{SCHOOL_DB.name}</span>
+                            <Icons.GraduationCap /> <span className="truncate">{db.name}</span>
                         </div>
                         <div className="p-6 flex items-center space-x-3 bg-gray-50/50">
                             <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-primary font-bold shadow-inner">{user.name.charAt(0)}</div>
